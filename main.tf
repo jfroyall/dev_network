@@ -1,0 +1,139 @@
+terraform {
+  required_providers {
+    libvirt = {
+      source = "dmacvicar/libvirt", version = "0.9.0"
+    }
+  }
+}
+
+terraform {
+  required_version = ">= 1.6.6"
+}
+
+provider "libvirt" {
+  # Configuration du fournisseur libvirt
+  #uri = "qemu:///system"
+  uri = "qemu+ssh://jean@192.168.1.96/system"
+
+}
+#
+// variables that can be overriden
+variable "hostname" { default = "test" }
+variable "domain"   { default = "example.com" }
+variable "ip_type"  { default = "dhcp" } # dhcp is other valid type
+variable "memoryMB" { default = 1024*1 }
+variable "cpu"      { default = 1 }
+#
+// fetch the latest ubuntu release image from their mirrors
+resource "libvirt_volume" "os_image" {
+  name = "${var.hostname}-os_image"
+  pool = "default"
+  #source = "jammy-server-cloudimg-amd64.img"
+  format = "qcow2"
+}
+#
+// Use CloudInit ISO to add ssh-key to the instance
+resource "libvirt_cloudinit_disk" "commoninit" {
+  name = "${var.hostname}-commoninit.iso"
+  #pool = "default"
+  meta_data = yamlencode({
+    instance-id    = "vm-01"
+    local-hostname = "webserver"
+  })
+  user_data      = data.cloudinit_config.config.rendered
+  #network_config = data.template_file.network_config.rendered
+  network_config = local.network_config
+}
+
+##############
+#data "template_file" "user_data" {
+#  template = file("${path.module}/cloud_init.cfg")
+#  vars = {
+#    hostname = var.hostname
+#    fqdn = "${var.hostname}.${var.domain}"
+#    public_key = file("~/.ssh/id_ed25519.pub")
+#  }
+#}
+
+locals {
+  template_file_user_data = templatefile("${path.module}/cloud_init.cfg" , {
+    hostname = var.hostname
+    fqdn = "${var.hostname}.${var.domain}"
+    #public_key = file("~/.ssh/id_ed25519.pub")
+    public_key = "~/.ssh/id_0000.pub"
+    }
+  )
+}
+
+#data.template_file.user_data = local.user_data
+##############
+
+
+#
+#data "template_cloudinit_config" "config" {
+#  gzip = false
+#  base64_encode = false
+#  part {
+#    filename = "init.cfg"
+#    content_type = "text/cloud-config"
+#    #content = "${data.template_file.user_data.rendered}"
+#    #content = "${local.user_data}"
+#  }
+#}
+#
+data "cloudinit_config" "config" {
+  gzip = false
+  base64_encode = false
+  part {
+    filename = "init.cfg"
+    content_type = "text/cloud-config"
+    #content = "${data.template_file.user_data.rendered}"
+    content = "${local.template_file_user_data}"
+  }
+}
+#
+#data "template_file" "network_config" {
+#  template = file("${path.module}/network_config_${var.ip_type}.cfg")
+#}
+#
+locals {
+  #network_config = templatefile("${path.module}/network_config_${var.ip_type}.cfg")
+  network_config = "${path.module}/network_config_${var.ip_type}.cfg"
+}
+#
+#
+#// Create the machine
+#resource "libvirt_domain" "domain-ubuntu" {
+#  # domain name in libvirt, not hostname
+#  name = "${var.hostname}"
+#  memory = var.memoryMB
+#  vcpu = var.cpu
+#
+#  disk {
+#    volume_id = libvirt_volume.os_image.id
+#  }
+#  network_interface {
+#    network_name = "default"
+#  }
+#
+#  cloudinit = libvirt_cloudinit_disk.commoninit.id
+#
+#  # IMPORTANT
+#  # Ubuntu can hang is a isa-serial is not present at boot time.
+#  # If you find your CPU 100% and never is available this is why
+#  console {
+#    type        = "pty"
+#    target_port = "0"
+#    target_type = "serial"
+#  }
+#
+#  graphics {
+#    type = "spice"
+#    listen_type = "address"
+#    autoport = "true"
+#  }
+#}
+#
+#output "ips" {
+#  value = libvirt_domain.domain-ubuntu.*.network_interface.0.addresses
+#}
