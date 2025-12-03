@@ -1,21 +1,21 @@
 # Basic pool
 resource "libvirt_pool" "default" {
-  name = "scratch"
+  name = "scratch-pool"
   type = "dir"
   source = {
     host = "localhost" 
-    dir = "/scratch" 
+    dir = "/scratch/scratch-pool" 
   }
   target = {
-    path = "/scratch"
+    path = "/scratch/scratch-pool"
   }
 }
 
 # Basic volume
 resource "libvirt_volume" "example" {
   name     = "example.qcow2"
-  pool     = "default"
-  capacity = 10737418240 # 10 GB
+  pool     = "${libvirt_pool.default}.name"
+  capacity = 1073741824 # 1 GB
   format   = "qcow2"
 }
 #
