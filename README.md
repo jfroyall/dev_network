@@ -28,6 +28,7 @@ The plan is to proceed as follows:
 - Add the necessary services to the `cuda` machine
    - `libvirt`
 - Add the necessary tools to the iMac
+   - Add a simple Jenkins server to support the CI/CD
 - Prepare a storage pool for the VM images
 - Prepare a storage pool for the VM disks
 - Prepare the repository
@@ -89,6 +90,7 @@ The plan is to proceed as follows:
    - Jenkins
    - Proxmox
    - Redmine
+   - Vault
 - Add the CUDA host
 
 ### Deployment with `terraform` templates
