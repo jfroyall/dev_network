@@ -17,14 +17,32 @@ The plan is to proceed as follows:
 - Deploy onto a free IaaS platform.
 - Deploy onto GCloud.
 
-## How to test
+## Development plan
 
 ### Deployment with `libvirt`
+#### The development environment
+- The `libvirt` host will be the `cuda` PC.
+- The development will be done on the iMac.
+
+#### Deployment 0
+- Add the necessary services to the `cuda` machine
+   - `libvirt`
+- Add the necessary tools to the iMac
+- Prepare a storage pool for the VM images
+- Prepare a storage pool for the VM disks
+- Prepare the repository
+<figure>
+  <img src="./docs/repository_ctl.png"   width="400" height="150" 
+      alt="foobar">
+  <figcaption> Work on dev; merge with staging; test on staging; merge with
+  master and test again.</figcaption>
+</figure>
+
 #### Deployment 1
 <figure>
-  <img src="./docs/libvirt_arch_1.png"   width="400" height="200" 
+  <img src="./docs/libvirt_arch_1.png"   width="400" height="100" 
       alt="foobar">
-  <figcaption> The target architecture.</figcaption>
+  <figcaption> An intermediate architecture.</figcaption>
 </figure>
 
 - A single host
@@ -32,9 +50,9 @@ The plan is to proceed as follows:
 
 #### Deployment 2
 <figure>
-  <img src="./docs/libvirt_arch_2.png"   width="400" height="200" 
+  <img src="./docs/libvirt_arch_2.png"   width="400" height="100" 
       alt="foobar">
-  <figcaption> The target architecture.</figcaption>
+  <figcaption> An intermediate architecture.</figcaption>
 </figure>
 
 - A single host 
@@ -45,7 +63,7 @@ The plan is to proceed as follows:
 <figure>
   <img src="./docs/libvirt_arch_3.png"   width="400" height="200" 
       alt="foobar">
-  <figcaption> The target architecture.</figcaption>
+  <figcaption> An intermediate architecture.</figcaption>
 </figure>
 
 - A single host 
@@ -56,11 +74,31 @@ The plan is to proceed as follows:
 
 
 #### Deployment 4
+- A single host 
+- The "Perimeter Network"
+- Improve the firewall with an 'external router'
+- Add the "internal network"
+- Add the 'internal router'
+- Add servers
+    - NTP server
+    - DNS server
+    - SMTP server
+    - MySQL server
+    - HTTP server
+- Add the other HTTP servers
+   - Jenkins
+   - Proxmox
+   - Redmine
+- Add the CUDA host
 
 ### Deployment with `terraform` templates
+   TBD
 
 ### Deployment onto GCloud
+   TBD
 
+## CI/CD
+The development 
 
 ## Status
 
