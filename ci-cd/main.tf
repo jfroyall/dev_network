@@ -11,13 +11,7 @@ terraform {
 
 provider "libvirt" {
   # Configuration du fournisseur libvirt
-  #uri = "qemu://jean@localhost/system"
-  #uri = "qemu://jean@localhost/session"
-  #uri = "qemu:///session"
-  #uri = "qemu:///session"
-  #uri = "qemu+ssh://jean@192.168.1.96/system"
-  #uri = "qemu+sshcmd://jean@192.168.1.96/system?keyfile=/home/jean/.ssh/id_rsa?no_verify=0?sshauth=privkey"
-  uri = "qemu+ssh://jean@192.168.1.96/system?knownhosts=/home/jean/.ssh/known_hosts?keyfile=/home/jean/.ssh/id_rsa?no_verify=1?sshauth=privkey"
+  uri = "qemu+sshcmd://jean@192.168.1.96/system?keyfile=/home/jean/.ssh/id_rsa&no_verify=0&sshauth=privkey"
 
 }
 
