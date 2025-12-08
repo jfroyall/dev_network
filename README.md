@@ -17,6 +17,12 @@ The plan is to proceed as follows:
 - Deploy onto a free IaaS platform.
 - Deploy onto GCloud.
 
+## Directory description
+-  The directory containing the scripts which construct the CI/CD VMs is
+   named `ci-cd`.
+-  The directory containing the scripts which construct the actual environment
+   is named `dabilly`.
+
 ## Development plan
 
 ### Deployment with `libvirt`
