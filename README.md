@@ -7,7 +7,6 @@ The objective is a development environment on the cloud
       alt="foobar">
   <figcaption> The target architecture.</figcaption>
 </figure>
-# ![The target architecture](./figures/final_arch.png "Final Architecture")
 
 ## The plan in general
 The plan is to proceed as follows:
