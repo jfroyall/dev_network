@@ -13,7 +13,7 @@
 
 # Basic volume
 resource "libvirt_volume" "example" {
-  name     = "example.qcow2"
+  name = "example.qcow2"
   #pool     = "${libvirt_pool.default}.name"
   pool     = "default"
   capacity = 1073741824 # 1 GB
