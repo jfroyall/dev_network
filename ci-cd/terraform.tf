@@ -3,7 +3,7 @@ terraform {
   required_version = ">= 1.13.5"
   required_providers {
     libvirt = {
-      source = "dmacvicar/libvirt", version = "0.9.0"
+      source = "dmacvicar/libvirt", version = "0.9.1"
     }
   }
 }
