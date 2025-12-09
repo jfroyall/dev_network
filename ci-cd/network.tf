@@ -26,7 +26,7 @@ resource "libvirt_network" "test" {
     ranges = [
       {
         start = "192.168.96.128"
-        end   = "192.168.96.192"
+        end   = "192.168.96.191"
       },
     ]
 
