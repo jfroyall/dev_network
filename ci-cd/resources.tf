@@ -13,8 +13,8 @@ resource "libvirt_pool" "default" {
 #
 ## Volume from HTTP URL upload
 resource "libvirt_volume" "alpine_base" {
-  name   = "alpine-3.22.2.qcow2"
-  pool   = libvirt_pool.default.name
+  name = "alpine-3.22.2.qcow2"
+  pool = libvirt_pool.default.name
   #format = "qcow2"
 
   create = {
@@ -27,8 +27,8 @@ resource "libvirt_volume" "alpine_base" {
 #
 ## Writable copy-on-write layer for the VM.
 resource "libvirt_volume" "alpine_disk" {
-  name     = "alpine-vm.qcow2"
-  pool     = libvirt_pool.default.name
+  name = "alpine-vm.qcow2"
+  pool = libvirt_pool.default.name
   #type     = "file"
   capacity = 2147483648
   target = {
@@ -37,7 +37,7 @@ resource "libvirt_volume" "alpine_disk" {
     }
   }
   backing_store = {
-    path   = libvirt_volume.alpine_base.path
+    path = libvirt_volume.alpine_base.path
   }
 }
 #
