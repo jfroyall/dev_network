@@ -10,7 +10,10 @@
 #    type    = "hvm"
 #    type_arch    = "x86_64"
 #    type_machine = "q35"
-#    #boot_devices = [ {dev = "hd"}]
+     #kernel = "/boot/vmlinuz"
+     #initrd = "/boot/initrd.img"
+     #kernel_args = "console=ttyS0 root=/dev/vda1"
+#    #boot_devices = [ {dev = "hd"}, {dev = "network"}]
 #  }
 #
 #  devices = {
