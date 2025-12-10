@@ -50,5 +50,25 @@ resource "libvirt_network" "test" {
     name       = "no.where.home"
   }
 
-  #forward = {}
+  forward = {
+    #addresses = [{ }]
+
+    #dev = ""
+
+    #driver = { }
+
+    #interfaces = [{ }]
+
+    #managed = false
+
+    mode = "nat"
+
+    nat = {
+      port = {
+        start = 1024
+        end   = 65535
+      }
+    }
+
+  }
 }

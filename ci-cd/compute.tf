@@ -7,22 +7,39 @@ resource "libvirt_domain" "alpine" {
   memory_unit = "MiB"
   vcpu   = 1
 
+#  cpu = {
+#    check = "partial"
+#    mode = "host-model"
+#  }
+
   os = {
     type          = "hvm"
-    type_arch     = "x86_64"
-    type_machine  = "q35"
-     #kernel      = "/boot/vmlinuz"
-     #initrd      = "/boot/initrd.img"
-     #kernel_args = "console=ttyS0 root=/dev/vda1"
-     #boot_devices = [ {dev = "hd"}, {dev = "network"}]
-     #boot_devices = [ {dev = "cdrom"}]
-     boot_devices = [ {dev = "hd"}]
+    #type_arch     = "x86_64"
+    #type_machine  = "q35"
+    boot_devices = [ {dev = "hd"}]
+
+    #kernel      = "/boot/vmlinuz"
+    #initrd      = "/boot/initrd.img"
+    #kernel_args = "console=ttyS0 root=/dev/vda1"
+    #boot_devices = [ {dev = "hd"}, {dev = "network"}]
+    #boot_devices = [ {dev = "cdrom"}]
+  }
+
+  features = {
+    acpi = true
+    apic = {
+      eoi = "off"
+    }
+    vm_port = {
+      state = "off"
+    }
   }
 
   destroy = {
     graceful = true
     timeout  = 30
   }
+
   devices = {
     disks = [
       {
@@ -58,20 +75,20 @@ resource "libvirt_domain" "alpine" {
       }
     ]
 
-#    interfaces = [
-#      {
-#        type  = "network"
-#        model = {
-#          type = "virtio"
-#        }
-#        source = {
-#          network = {
-#            network = "test-network"
-#          }
-#        }
-#      }
-#    ]
-#
+    interfaces = [
+      {
+        type  = "network"
+        model = {
+          type = "virtio"
+        }
+        source = {
+          network = {
+            network = "test-network"
+          }
+        }
+      }
+    ]
+
     graphics = [
       {
         vnc = {
