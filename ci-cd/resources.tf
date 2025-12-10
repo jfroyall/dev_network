@@ -38,6 +38,9 @@ resource "libvirt_volume" "alpine_disk" {
   }
   backing_store = {
     path = libvirt_volume.alpine_base.path
+    format = {
+      type = "qcow2"
+    }
   }
 }
 #
