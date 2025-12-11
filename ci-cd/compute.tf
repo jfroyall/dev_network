@@ -35,6 +35,10 @@ resource "libvirt_domain" "alpine" {
     }
   }
 
+  on_poweroff = "destroy"
+  on_reboot   = "restart"
+  on_crash    = "destroy"
+
   destroy = {
     graceful = true
     timeout  = 30
