@@ -1,3 +1,7 @@
+variable "vm_condition_poweron" {
+  default = true
+}
+
 variable "web_instance_count" {
   type        = number
   description = "Number of web instances to deploy. This application requires at least two instances."

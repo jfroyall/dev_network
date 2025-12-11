@@ -32,3 +32,18 @@ The bulk of the deployment and configuration will use:
 
 - 9 Dec 2025
    - Reconstructing the directory to follow the Terraform best practices.
+
+- 11 Dec 2025
+   - I was able to `create` and `undefine` an instance.  
+     Until I find a cleaner approach I must use the following sequence of
+     commands.
+     ```
+        terraform apply -auto-approve  -var 'vm_condition_poweron=true'
+        terraform apply -auto-approve  -var 'vm_condition_poweron=false'
+        terraform apply -auto-approve  -var 'vm_condition_poweron=false' -destroy
+     ```
+     The first command deploys the resources.  The second command will result
+     in the destruction of the VM.  The third command will destroy the
+     other resources.
+
+

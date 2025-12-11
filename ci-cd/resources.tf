@@ -1,3 +1,19 @@
+## A null resource 
+resource "terraform_data" "shutdowner" {
+  # iterate with for_each over Vms list ( my *.tf file creates VMs from list)
+  #for_each = toset(local.vm_common_list_count)
+  #triggers = { trigger = var.vm_condition_poweron }
+
+  triggers_replace  = [
+    var.vm_condition_poweron
+  ]
+  provisioner "local-exec" {
+    #command = var.vm_condition_poweron?"echo 'do nothing'":"echo 'do less'"
+    command = var.vm_condition_poweron?"echo 'do nothing'":"undefine.sh"
+    #command = var.vm_condition_poweron?"echo 'do nothing'":"virsh -c qemu:///system shutdown alpine-vm \&\& virsh -c qemu:///system undefine alpine-vm"
+    #command = var.vm_condition_poweron?"echo 'do nothing'":"virsh -c qemu:///system shutdown ${each.value}"
+  }
+}
 ## Basic pool
 resource "libvirt_pool" "default" {
   name = "scratch-pool"
