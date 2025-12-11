@@ -21,12 +21,13 @@ The bulk of the deployment and configuration will use:
   - A pool to store the VM images
   - A pool of SSD volumes.
 
-## Concerns
+## Concerns/Issues
 -  I plan to proceed iteratively---building->configuring->altering.  
 -  Once I have a reliable collection of Terraform and Ansible scripts, I need
    a way to reconstruct the environment.  I suppose that backing up the disks
    and the databases will suffice.
--  How to handle sensitive data.
+-  How to handle sensitive data?
+-  Why does `terraform` fail to `undefine` the VMs?
 
 ## Status
 
@@ -46,4 +47,18 @@ The bulk of the deployment and configuration will use:
      in the destruction of the VM.  The third command will destroy the
      other resources.
 
+     The `terraform` application fails to undefine the VM, and I cannot
+     figure out why.  The second step destroys the VM with the `virsh` CLI.
+
+   - The following figure was lifted from the `libvirt` wiki.
+
+<figure>
+  <img src="../figures/vm_lifecycle_graph.png"   width="400" height="200" 
+      alt="foobar">
+  <figcaption> The VM lifecycle graph</figcaption>
+</figure>
+
+   - For the next time:
+      - Add 'jean' as a user.
+      - Establish and check the DNS.
 
