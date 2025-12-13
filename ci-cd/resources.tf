@@ -43,8 +43,10 @@ resource "libvirt_volume" "alpine_base" {
 #
 ## Writable copy-on-write layer for the VM.
 resource "libvirt_volume" "alpine_disk" {
-  count = var.instance_count
-  name = "alpine-vm-${count.index}.qcow2"
+  #count = var.instance_count
+  for_each = var.all_vms
+
+  name = "${each.value.name}.qcow2"
   pool = libvirt_pool.default.name
   #type     = "file"
   capacity = 2147483648
@@ -66,7 +68,8 @@ resource "libvirt_volume" "alpine_disk" {
 ## Cloud-init seed ISO.
 resource "libvirt_cloudinit_disk" "alpine_seed" {
 
-  count = var.instance_count
+  #count = var.instance_count
+  for_each = var.all_vms
 
   name = "alpine-cloudinit"
 
@@ -86,8 +89,8 @@ resource "libvirt_cloudinit_disk" "alpine_seed" {
   EOF
 
   meta_data = <<-EOF
-    instance-id: alpine-${count.index}
-    local-hostname: alpine-vm-${count.index}
+    instance-id: ${each.value.name}
+    local-hostname: ${each.value.name}
   EOF
 
   network_config = <<-EOF
@@ -101,14 +104,14 @@ resource "libvirt_cloudinit_disk" "alpine_seed" {
 ## Upload the cloud-init ISO into the pool.
 resource "libvirt_volume" "alpine_seed_volume" {
 
-  count = var.instance_count
+  for_each = var.all_vms
 
-  name = "alpine-cloudinit-${count.index}.iso"
+  name = "alpine-cloudinit-${each.value.name}.iso"
   pool = "default"
 
   create = {
     content = {
-      url = libvirt_cloudinit_disk.alpine_seed[count.index].path
+      url = libvirt_cloudinit_disk.alpine_seed[each.value.name].path
     }
   }
 }

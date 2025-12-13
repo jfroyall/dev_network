@@ -1,9 +1,11 @@
 ##
 ## Virtual machine definition.
 resource "libvirt_domain" "alpine" {
-  count = var.instance_count
 
-  name   = "alpine-vm-${count.index}"
+  #count = var.instance_count
+  for_each = var.all_vms
+
+  name   = each.value.name
   type   = "kvm"
   memory = 2048
   memory_unit = "MiB"
@@ -51,8 +53,10 @@ resource "libvirt_domain" "alpine" {
       {
         source = {
           volume = {
-            pool   = libvirt_volume.alpine_disk[count.index].pool
-            volume = libvirt_volume.alpine_disk[count.index].name
+            #pool   = libvirt_volume.alpine_disk[count.index].pool
+            #volume = libvirt_volume.alpine_disk[count.index].name
+            pool   = libvirt_volume.alpine_disk[each.value.name].pool
+            volume = libvirt_volume.alpine_disk[each.value.name].name
           }
         }
         target = {
@@ -70,8 +74,10 @@ resource "libvirt_domain" "alpine" {
         device = "cdrom"
         source = {
           volume = {
-            pool   = libvirt_volume.alpine_seed_volume[count.index].pool
-            volume = libvirt_volume.alpine_seed_volume[count.index].name
+            #pool   = libvirt_volume.alpine_seed_volume[count.index].pool
+            #volume = libvirt_volume.alpine_seed_volume[count.index].name
+            pool   = libvirt_volume.alpine_seed_volume[each.value.name].pool
+            volume = libvirt_volume.alpine_seed_volume[each.value.name].name
           }
         }
         target = {

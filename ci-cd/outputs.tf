@@ -1,3 +1,7 @@
+output "all_vms" {
+ description = "Description of the VMS"
+ value       = var.all_vms
+}
 output "vm_condition_poweron" {
  description = "Public IP of the web instance"
  value       = var.vm_condition_poweron

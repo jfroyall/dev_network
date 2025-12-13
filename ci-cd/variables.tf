@@ -1,3 +1,29 @@
+
+variable "all_vms"{
+  type = map(object({
+    name     = string
+    sof_mem  = string
+    sof_disk = string
+    network  = string
+  }))
+
+  default ={
+            jumpbox = {
+              name    : "jumpbox"
+              sof_mem : "1"
+              sof_disk: "2"
+              network : "foobar"
+            },
+            vault = {
+              name    : "vault"
+              sof_mem : "1"
+              sof_disk: "2"
+              network : "foobar"
+            },
+            }
+  description ="The set of all VMs which will be created."
+}
+
 variable "vm_condition_poweron" {
   description = "Set to true if the instances are defined"
   default = true
