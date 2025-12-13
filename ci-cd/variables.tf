@@ -1,4 +1,5 @@
 
+#Be sure to update 'undefine.sh' if you add more VMs
 variable "all_vms"{
   type = map(object({
     name     = string
@@ -10,15 +11,21 @@ variable "all_vms"{
   default ={
             jumpbox = {
               name    : "jumpbox"
-              sof_mem : "1"
-              sof_disk: "2"
-              network : "foobar"
+              sof_mem : "0"
+              sof_disk: "0"
+              network : "outer-network"
             },
             vault = {
               name    : "vault"
-              sof_mem : "1"
-              sof_disk: "2"
-              network : "foobar"
+              sof_mem : "0"
+              sof_disk: "0"
+              network : "outer-network"
+            },
+            ns1 = {
+              name    : "ns1"
+              sof_mem : "0"
+              sof_disk: "0"
+              network : "outer-network"
             },
             }
   description ="The set of all VMs which will be created."

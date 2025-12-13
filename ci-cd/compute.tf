@@ -95,7 +95,7 @@ resource "libvirt_domain" "alpine" {
         }
         source = {
           network = {
-            network = "test-network"
+            network = "outer-network"
           }
         }
       }

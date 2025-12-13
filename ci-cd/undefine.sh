@@ -1,4 +1,4 @@
-for d in jumpbox vault; do 
+for d in ns1 jumpbox vault; do 
 echo $d; 
   virsh -c qemu:///system shutdown $d && virsh -c qemu:///system undefine $d
 done

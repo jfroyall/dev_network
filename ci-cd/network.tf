@@ -1,6 +1,6 @@
 # A sub-network
-resource "libvirt_network" "test" {
-  name      = "test-network"
+resource "libvirt_network" "outer" {
+  name      = "outer-network"
   autostart = "false"
 
   dns = {
