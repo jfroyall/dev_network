@@ -1,4 +1,3 @@
-
 # A sub-network
 resource "libvirt_network" "test" {
   name      = "test-network"
@@ -47,7 +46,8 @@ resource "libvirt_network" "test" {
 
   domain = {
     local_only = "yes"
-    name       = "no.where.home"
+    name       = "management.dabilly.home"
+    register   = "yes"
   }
 
   forward = {
