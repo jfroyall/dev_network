@@ -1,5 +1,5 @@
 
-## Basic pool
+## Basic pool (Note that 3 pools are constructed.)
 resource "libvirt_pool" "basic" {
   for_each = toset(["os-isos", "vm-ssds", "vm-images"])
   name = "${each.value}-pool"
@@ -26,6 +26,26 @@ resource "libvirt_volume" "alpine_base" {
     }
   }
   # capacity is automatically computed from Content-Length header
+}
+
+## Volumes of Turkey ISOs
+resource "libvirt_volume" "ISOs" {
+  
+  for_each = var.all_isos
+
+  name = "${each.value.name}"
+  pool = libvirt_pool.basic["os-isos"].name
+
+  #pool = libvirt_pool.default.name
+  #format = "qcow2"
+  
+  #capacity = 1073741824
+
+  create = {
+    content = {
+      url = "${each.value.url}"
+    }
+  }
 }
 
 

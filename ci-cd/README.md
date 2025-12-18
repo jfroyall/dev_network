@@ -128,7 +128,12 @@ The bulk of the deployment and configuration will use:
 
 - 18 Dec 2025
    - Worked on the development configurations
-
+   - Started to write a script to incrementally build the infrastructure.  The
+     script is named `build-infrastructure.sh`.
+   - I had to download the ISOs from Turnkey, because the provider could not
+     build the volume from the specified URL.
+   - The script builds and destroys the pools and a few of the volumes.
+   - For the next time build the volumes required for the VMs.
 
 
 

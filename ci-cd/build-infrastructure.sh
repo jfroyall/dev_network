@@ -58,14 +58,15 @@ function stage_1_b {
 }
 
 
-POOL=libvirt_pool.basic
-stage_1_a plan ${POOL}.tf_plan ${POOL}
-stage_1_a apply ${POOL}.tf_plan ${POOL}
-stage_1_a destroy ${POOL}.tf_plan ${POOL}
+#POOL=libvirt_pool.basic
+#stage_1_a plan ${POOL}.tf_plan ${POOL}
+#stage_1_a apply ${POOL}.tf_plan ${POOL}
+#stage_1_a destroy ${POOL}.tf_plan ${POOL}
 
 
 
-VOL=libvirt_volume.alpine_base
-#stage_1_b plan ${VOL}.tf_plan ${VOL}
-#stage_1_b apply ${VOL}.tf_plan ${VOL}
-#stage_1_b destroy ${VOL}.tf_plan ${VOL}
+for VOL in libvirt_volume.ISOs libvirt_volume.alpine_base ; do
+  stage_1_b plan ${VOL}.tf_plan ${VOL}
+  stage_1_b apply ${VOL}.tf_plan ${VOL}
+  #stage_1_b destroy ${VOL}.tf_plan ${VOL}
+done

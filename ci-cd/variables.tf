@@ -1,4 +1,55 @@
 
+variable "all_imgs"{
+  type = map(object({
+                    name = string
+                    url  = string
+                  }))
+  default ={
+#            redmine = {
+#              name: "redmine"
+#              url : "https://www.turnkeylinux.org/download?file=turnkey-redmine-18.1-bookworm-amd64.iso"
+#            },
+#            jenkins = {
+#              name: "jenkins"
+#              url : "https://www.turnkeylinux.org/download?file=turnkey-jenkins-18.1-bookworm-amd64.iso"
+#            },
+            core = {
+              name: "core-turnkey"
+              url : "https://www.turnkeylinux.org/docs/builds#vm-vmdk"
+            },
+           }
+  description ="The ISOs required for the build."
+}
+variable "all_isos"{
+  type = map(object({
+                    name = string
+                    url  = string
+                  }))
+  default ={
+            redmine = {
+              name: "redmine"
+              url : "file:///scratch/turnkey-redmine-18.1-bookworm-amd64.iso"
+              #url : "https://www.turnkeylinux.org/download?file=turnkey-redmine-18.1-bookworm-amd64.iso"
+            },
+            jenkins = {
+              name: "jenkins"
+              url : "file:///scratch/turnkey-jenkins-18.1-bookworm-amd64.iso"
+              #url : "https://www.turnkeylinux.org/download?file=turnkey-jenkins-18.1-bookworm-amd64.iso"
+            },
+            core = {
+              name: "core-turnkey"
+              url : "file:///scratch/turnkey-core-18.1-bookworm-amd64.iso"
+              #url : "https://www.turnkeylinux.org/download?file=turnkey-core-18.1-bookworm-amd64.iso"
+            },
+            nginx = {
+              name: "nginx"
+              url : "file:///scratch/turnkey-nginx-php-fastcgi-18.0-bookworm-amd64.iso"
+            },
+           }
+  description ="The ISOs required for the build."
+}
+
+
 #Be sure to update 'undefine.sh' if you add more VMs
 variable "all_vms"{
   type = map(object({
