@@ -14,33 +14,21 @@ resource "terraform_data" "shutdowner" {
     #command = var.vm_condition_poweron?"echo 'do nothing'":"virsh -c qemu:///system shutdown ${each.value}"
   }
 }
-#
-## Volume from HTTP URL upload
-resource "libvirt_volume" "alpine_base" {
-  name = "alpine-3.22.2.qcow2"
-  pool = libvirt_pool.default.name
-  #format = "qcow2"
 
-  create = {
-    content = {
-      url = "https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/generic_alpine-3.22.2-x86_64-bios-cloudinit-r0.qcow2"
-    }
-  }
-  # capacity is automatically computed from Content-Length header
-}
-#
+
 ## Writable copy-on-write layer for the VM.
 resource "libvirt_volume" "alpine_disk" {
 
   for_each = var.all_vms
 
   name = "${each.value.name}.qcow2"
-  pool = libvirt_pool.default.name
+
+  pool      = libvirt_pool.default.name
   #type     = "file"
-  capacity = 2147483648
+  capacity  = 2147483648
   target = {
     format = {
-      type = "qcow2"
+    type   = "qcow2"
     }
   }
   backing_store = {
@@ -50,7 +38,7 @@ resource "libvirt_volume" "alpine_disk" {
     }
   }
 }
-#
+
 #
 #
 ## Cloud-init seed ISO.
