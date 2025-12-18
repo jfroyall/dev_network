@@ -85,6 +85,12 @@ resource "libvirt_cloudinit_disk" "alpine_seed" {
     packages:
       - openssh-server
 
+    users:
+      - name: jean
+        shell: /bin/sh
+        lock_passwd: false
+        plain_text_passwd: password
+
     timezone: UTC
   EOF
 

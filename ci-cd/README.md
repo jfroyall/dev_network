@@ -62,3 +62,14 @@ The bulk of the deployment and configuration will use:
       - Add 'jean' as a user.
       - Establish and check the DNS.
 
+- 13 Dec 2025
+
+   - ~~Add 'jean' as a user.~~
+   - ~~Establish and check the DNS.~~
+
+   - For the next time:
+      - Add a real vault
+      - Start to improve the jumpbox
+      - ~~Establish and check the DNS.~~
+
+
