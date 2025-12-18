@@ -32,6 +32,54 @@ The bulk of the deployment and configuration will use:
 ## TO DO
   - Add a real vault
 
+## Development configurations
+
+  The development is to proceed iteratively.  I plan to add more and more
+  objects to the deployment until I reach the final state.
+    <figure>
+      <img src="../figures/testing.png"   width="400" height="150" 
+          alt="foobar">
+      <figcaption> The testing states</figcaption>
+    </figure>
+
+  1.  Build all storage pools and volumes
+
+      1. OS-ISOs
+          1.  Turnkey Core
+          1.  Turnkey Jenkins
+          1.  Turnkey Redmine
+          1.  Turnkey Nginx
+          1.  Proxmox Server
+          1.  NTP server
+      1. VM-SSDs
+          1.  Vault
+          1.  Proxmox
+          1.  Jenkins
+          1.  Redmine
+          1.  Nginx
+          1.  ntp-server
+          1.  Jenkins SSD
+      1. VM-images (QEMD)
+
+  1.  Download all ISOs and Images
+
+  1.  Build all sub-networks
+      1. inner
+      1. outer
+
+  1.  Build all instances tied to the 'perimeter network'
+      1. jumpbox
+      1. nginx
+      1. ntp
+
+  1.  Build all instances tied to the 'internal network'
+      1. vault
+      1. proxmox
+      1. redmine
+      1. jenkins
+      1. jenkins-workers
+      1. cuda
+
 ## Status
 
 - 9 Dec 2025
@@ -76,8 +124,11 @@ The bulk of the deployment and configuration will use:
 
 - 14 Dec 2025
 
-   - Worked further on the creation of a root certificate.  The scripts are in
-     :q
+   - Worked further on the creation of a root certificate.  The scripts are in build-certs
+
+- 18 Dec 2025
+   - Worked on the development configurations
+
 
 
 

@@ -2,11 +2,11 @@
 #Be sure to update 'undefine.sh' if you add more VMs
 variable "all_vms"{
   type = map(object({
-    name     = string
-    sof_mem  = string
-    sof_disk = string
-    network  = string
-  }))
+                    name     = string
+                    sof_mem  = string
+                    sof_disk = string
+                    network  = string
+                  }))
 
   default ={
             jumpbox = {

@@ -2,7 +2,6 @@
 ## Virtual machine definition.
 resource "libvirt_domain" "alpine" {
 
-  #count = var.instance_count
   for_each = var.all_vms
 
   name   = each.value.name
@@ -53,8 +52,6 @@ resource "libvirt_domain" "alpine" {
       {
         source = {
           volume = {
-            #pool   = libvirt_volume.alpine_disk[count.index].pool
-            #volume = libvirt_volume.alpine_disk[count.index].name
             pool   = libvirt_volume.alpine_disk[each.value.name].pool
             volume = libvirt_volume.alpine_disk[each.value.name].name
           }

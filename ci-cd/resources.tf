@@ -14,18 +14,6 @@ resource "terraform_data" "shutdowner" {
     #command = var.vm_condition_poweron?"echo 'do nothing'":"virsh -c qemu:///system shutdown ${each.value}"
   }
 }
-## Basic pool
-resource "libvirt_pool" "default" {
-  name = "scratch-pool"
-  type = "dir"
-  # source = {
-  #    host = "localhost" 
-  #   dir = "/scratch/scratch-pool" 
-  # }
-  target = {
-    path = "/scratch/scratch-pool"
-  }
-}
 #
 ## Volume from HTTP URL upload
 resource "libvirt_volume" "alpine_base" {
@@ -43,7 +31,7 @@ resource "libvirt_volume" "alpine_base" {
 #
 ## Writable copy-on-write layer for the VM.
 resource "libvirt_volume" "alpine_disk" {
-  #count = var.instance_count
+
   for_each = var.all_vms
 
   name = "${each.value.name}.qcow2"
@@ -68,7 +56,6 @@ resource "libvirt_volume" "alpine_disk" {
 ## Cloud-init seed ISO.
 resource "libvirt_cloudinit_disk" "alpine_seed" {
 
-  #count = var.instance_count
   for_each = var.all_vms
 
   name = "alpine-cloudinit"
