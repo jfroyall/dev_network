@@ -15,7 +15,7 @@ PngFiles=$(shell find . -type f -name "libvirt_arch_[1-9].fig" | sed -e 's/fig/p
 #f:
 #	@echo $(InFiles)
 
-all: repository_ctl.png final_arch.png ${PngFiles}
+all: testing.png repository_ctl.png final_arch.png ${PngFiles}
 
 clean:
 	rm -f *.fig.bak

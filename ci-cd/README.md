@@ -29,6 +29,9 @@ The bulk of the deployment and configuration will use:
 -  How to handle sensitive data?
 -  Why does `terraform` fail to `undefine` the VMs?
 
+## TO DO
+  - Add a real vault
+
 ## Status
 
 - 9 Dec 2025
@@ -68,8 +71,13 @@ The bulk of the deployment and configuration will use:
    - ~~Establish and check the DNS.~~
 
    - For the next time:
-      - Add a real vault
       - Start to improve the jumpbox
       - ~~Establish and check the DNS.~~
+
+- 14 Dec 2025
+
+   - Worked further on the creation of a root certificate.  The scripts are in
+     :q
+
 
 
