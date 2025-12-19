@@ -52,8 +52,8 @@ resource "libvirt_domain" "alpine" {
       {
         source = {
           volume = {
-            pool   = libvirt_volume.alpine_disk[each.value.name].pool
-            volume = libvirt_volume.alpine_disk[each.value.name].name
+            pool   = libvirt_volume.vm_disk[each.value.name].pool
+            volume = libvirt_volume.vm_disk[each.value.name].name
           }
         }
         target = {

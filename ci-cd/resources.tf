@@ -15,30 +15,6 @@ resource "terraform_data" "shutdowner" {
   }
 }
 
-
-## Writable copy-on-write layer for the VM.
-resource "libvirt_volume" "alpine_disk" {
-
-  for_each = var.all_vms
-
-  name = "${each.value.name}.qcow2"
-
-  pool      = libvirt_pool.default.name
-  #type     = "file"
-  capacity  = 2147483648
-  target = {
-    format = {
-    type   = "qcow2"
-    }
-  }
-  backing_store = {
-    path = libvirt_volume.alpine_base.path
-    format = {
-      type = "qcow2"
-    }
-  }
-}
-
 #
 #
 ## Cloud-init seed ISO.

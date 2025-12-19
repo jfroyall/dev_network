@@ -1,5 +1,6 @@
 
-variable "all_imgs"{
+#The images required.  Note that the index is the name of the VM.
+variable "all_images"{
   type = map(object({
                     name = string
                     url  = string
@@ -13,13 +14,19 @@ variable "all_imgs"{
 #              name: "jenkins"
 #              url : "https://www.turnkeylinux.org/download?file=turnkey-jenkins-18.1-bookworm-amd64.iso"
 #            },
-            core = {
-              name: "core-turnkey"
-              url : "https://www.turnkeylinux.org/docs/builds#vm-vmdk"
+#            core = {
+#              name: "core-turnkey"
+#              url : "https://www.turnkeylinux.org/docs/builds#vm-vmdk"
+#            },
+            alpine = {
+              name = "alpine-3.22.2"
+              url = "https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/generic_alpine-3.22.2-x86_64-bios-cloudinit-r0.qcow2"
             },
            }
-  description ="The ISOs required for the build."
+  description ="The images required for the build."
 }
+
+#The ISOs required.  Note that the index is the name of the VM.
 variable "all_isos"{
   type = map(object({
                     name = string
@@ -29,17 +36,14 @@ variable "all_isos"{
             redmine = {
               name: "redmine"
               url : "file:///scratch/turnkey-redmine-18.1-bookworm-amd64.iso"
-              #url : "https://www.turnkeylinux.org/download?file=turnkey-redmine-18.1-bookworm-amd64.iso"
             },
             jenkins = {
               name: "jenkins"
               url : "file:///scratch/turnkey-jenkins-18.1-bookworm-amd64.iso"
-              #url : "https://www.turnkeylinux.org/download?file=turnkey-jenkins-18.1-bookworm-amd64.iso"
             },
             core = {
               name: "core-turnkey"
               url : "file:///scratch/turnkey-core-18.1-bookworm-amd64.iso"
-              #url : "https://www.turnkeylinux.org/download?file=turnkey-core-18.1-bookworm-amd64.iso"
             },
             nginx = {
               name: "nginx"
@@ -56,6 +60,7 @@ variable "all_vms"{
                     name     = string
                     sof_mem  = string
                     sof_disk = string
+                    image    = string
                     network  = string
                   }))
 
@@ -64,21 +69,31 @@ variable "all_vms"{
               name    : "jumpbox"
               sof_mem : "0"
               sof_disk: "0"
+              image   : "alpine"
               network : "outer-network"
             },
             vault = {
               name    : "vault"
               sof_mem : "0"
               sof_disk: "0"
+              image   : "core"
               network : "outer-network"
             },
             ns1 = {
               name    : "ns1"
               sof_mem : "0"
               sof_disk: "0"
+              image   : "core"
               network : "outer-network"
             },
-            }
+            jenkins = {
+              name    : "jenkins"
+              sof_mem : "0"
+              sof_disk: "0"
+              image   : "jenkins"
+              network : "inner-network"
+            },
+           }
   description ="The set of all VMs which will be created."
 }
 

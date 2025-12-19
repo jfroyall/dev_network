@@ -133,7 +133,9 @@ The bulk of the deployment and configuration will use:
    - I had to download the ISOs from Turnkey, because the provider could not
      build the volume from the specified URL.
    - The script builds and destroys the pools and a few of the volumes.
-   - For the next time build the volumes required for the VMs.
+   - For the next time:
+      - Build the volumes required for the VMs.
 
+- 19 Dec 2025
 
 
