@@ -6,18 +6,6 @@ variable "all_images"{
                     url  = string
                   }))
   default ={
-#            redmine = {
-#              name: "redmine"
-#              url : "https://www.turnkeylinux.org/download?file=turnkey-redmine-18.1-bookworm-amd64.iso"
-#            },
-#            jenkins = {
-#              name: "jenkins"
-#              url : "https://www.turnkeylinux.org/download?file=turnkey-jenkins-18.1-bookworm-amd64.iso"
-#            },
-#            core = {
-#              name: "core-turnkey"
-#              url : "https://www.turnkeylinux.org/docs/builds#vm-vmdk"
-#            },
             alpine = {
               name = "alpine-3.22.2"
               url = "https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/generic_alpine-3.22.2-x86_64-bios-cloudinit-r0.qcow2"
@@ -53,6 +41,11 @@ variable "all_isos"{
   description ="The ISOs required for the build."
 }
 
+
+## ## ## ## ## ## ## ## ## ##
+##  ------   Important DO NOT add redmine until later!
+##  ------   Important DO NOT add redmine until later!
+## ## ## ## ## ## ## ## ## ##
 
 #Be sure to update 'undefine.sh' if you add more VMs
 variable "all_vms"{

@@ -134,8 +134,13 @@ The bulk of the deployment and configuration will use:
      build the volume from the specified URL.
    - The script builds and destroys the pools and a few of the volumes.
    - For the next time:
-      - Build the volumes required for the VMs.
+      - ~~Build the volumes required for the VMs.~~
 
 - 19 Dec 2025
-
+   - Built the volumes required for the VMs.
+   - For the next time:
+      1. ~~Add the networks.~~
+      1. ~~Boot a VM with the 'alpine' qcow2 image.~~
+      1. ~~Boot a VM with the Turnkey 'core' ISO.~~
+   - Starting to use `Ansible` to build some of the VMs
 

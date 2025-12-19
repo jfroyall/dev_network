@@ -63,10 +63,16 @@ function stage_1_b {
 #stage_1_a apply ${POOL}.tf_plan ${POOL}
 #stage_1_a destroy ${POOL}.tf_plan ${POOL}
 
+#for VOL in libvirt_volume.ISOs libvirt_volume.alpine_base ; do
+#  stage_1_b plan ${VOL}.tf_plan ${VOL}
+#  stage_1_b apply ${VOL}.tf_plan ${VOL}
+#  #stage_1_b destroy ${VOL}.tf_plan ${VOL}
+#done
 
-
-for VOL in libvirt_volume.ISOs libvirt_volume.alpine_base ; do
-  stage_1_b plan ${VOL}.tf_plan ${VOL}
-  stage_1_b apply ${VOL}.tf_plan ${VOL}
-  #stage_1_b destroy ${VOL}.tf_plan ${VOL}
+for NET in libvirt_network.outer libvirt_network.inner; do
+  terraform plan -out=${NET}.tf_plan -target=${NET}
+  terraform apply ${NET}.tf_plan 
+  #terraform destroy -target=${NET}
 done
+
+

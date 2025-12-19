@@ -1,5 +1,6 @@
 ##
 ## Virtual machine definition.
+
 resource "libvirt_domain" "alpine" {
 
   for_each = var.all_vms

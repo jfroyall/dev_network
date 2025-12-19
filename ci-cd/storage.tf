@@ -14,19 +14,19 @@ resource "libvirt_pool" "basic" {
 }
 
 ## Volume from HTTP URL upload
-resource "libvirt_volume" "alpine_base" {
-  name = "alpine-3.22.2.qcow2"
-  pool = libvirt_pool.basic["vm-images"].name
-  #pool = libvirt_pool.default.name
-  #format = "qcow2"
-  # capacity is automatically computed from Content-Length header
-
-  create = {
-    content = {
-      url = "https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/generic_alpine-3.22.2-x86_64-bios-cloudinit-r0.qcow2"
-    }
-  }
-}
+#resource "libvirt_volume" "alpine_base" {
+#  name = "alpine-3.22.2.qcow2"
+#  pool = libvirt_pool.basic["vm-images"].name
+#  #pool = libvirt_pool.default.name
+#  #format = "qcow2"
+#  # capacity is automatically computed from Content-Length header
+#
+#  create = {
+#    content = {
+#      url = "https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/generic_alpine-3.22.2-x86_64-bios-cloudinit-r0.qcow2"
+#    }
+#  }
+#}
 
 ## Volume of prebuilt images
 resource "libvirt_volume" "alpine_images" {
