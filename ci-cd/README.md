@@ -140,7 +140,45 @@ The bulk of the deployment and configuration will use:
    - Built the volumes required for the VMs.
    - For the next time:
       1. ~~Add the networks.~~
-      1. ~~Boot a VM with the 'alpine' qcow2 image.~~
-      1. ~~Boot a VM with the Turnkey 'core' ISO.~~
-   - Starting to use `Ansible` to build some of the VMs
+      1. Boot a VM with the 'alpine' qcow2 image.
+      1. Boot a VM with the Turnkey 'core' ISO.
+      1. Start to use `Ansible` to build some of the VMs.
 
+- 20 Dec 2025
+   - Ran into a problem with the ISO images.  I am using the ISO as a backing
+     store, but the ISO is used to boot the VM.  The boot scripts therfore try
+     to write the ISO.  That is, the script is trying to alter the booting medium.
+
+     I am going to change the configuration so that the initial construction
+     of an ISO based VM mounts the CD-ROM with the ISO.  This should allow the
+     boot to complete.  The hard drive will have no backing store.
+
+     The IMG based VMs will boot as currently configured.
+
+   - I have to rework the Terraform code.  This is the new plan:
+      1. Use `virsh` to build the pools.
+      1. Use the VM manager to build the `.qcow2` files derived from `Turnkey`.
+         The result will be a collection of QCOW2 files which must be stored
+         in the 'image' pool.
+
+         The following images should be based on the `Terraform` appliances:
+            1. The `vault` image---using the 'core' ISO.
+            1. The `nginx` image.
+            1. The `jenkins` image.
+            1. The `redmine` image.
+            1. The `my-sql` image.
+      1. Use the VM manager to build the rest of the `.qcow2`.
+            1. The `cuda` image.
+            1. The `proxmox` image.
+            1. The `ntp` image.
+            1. The `dns` image.
+            1. The `smtp` image.
+      1. Use these QCOW2 files as backing stores for the VMs.
+      1. Remove the dynamic construction of the pools and volumes from the
+      `Terraform` scripts.
+   - Building `qcow2` images...
+      1. The `vault` image---using the 'core' ISO.
+      1. ~~The `nginx` image.~~
+      1. The `jenkins` image.
+      1. The `redmine` image.
+      1. The `my-sql` image.

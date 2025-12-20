@@ -10,6 +10,10 @@ variable "all_images"{
               name = "alpine-3.22.2"
               url = "https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/generic_alpine-3.22.2-x86_64-bios-cloudinit-r0.qcow2"
             },
+            vault = {
+              name: "core-turnkey"
+              url : "file:///scratch/vault.qcow2"
+            },
            }
   description ="The images required for the build."
 }
@@ -51,27 +55,30 @@ variable "all_isos"{
 variable "all_vms"{
   type = map(object({
                     name     = string
-                    sof_mem  = string
-                    sof_disk = string
+                    sof_mem  = number
+                    sof_disk = number
                     image    = string
                     network  = string
                   }))
 
   default ={
+            /*
             jumpbox = {
               name    : "jumpbox"
-              sof_mem : "0"
-              sof_disk: "0"
+              sof_mem : 2*1024*1024*1024
+              sof_disk: 5*1024*1024*1024
               image   : "alpine"
               network : "outer-network"
             },
+            */
             vault = {
               name    : "vault"
-              sof_mem : "0"
-              sof_disk: "0"
-              image   : "core"
+              sof_mem : 5*1024*1024*1024
+              sof_disk: 5*1024*1024*10240
+              image   : "vault"
               network : "outer-network"
             },
+            /*
             ns1 = {
               name    : "ns1"
               sof_mem : "0"
@@ -86,6 +93,7 @@ variable "all_vms"{
               image   : "jenkins"
               network : "inner-network"
             },
+           */
            }
   description ="The set of all VMs which will be created."
 }

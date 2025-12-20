@@ -49,7 +49,7 @@ resource "libvirt_volume" "ISOs" {
   
   for_each = var.all_isos
 
-  name = "${each.value.name}"
+  name = "${each.value.name}.qcow2"
   pool = libvirt_pool.basic["os-isos"].name
 
   #pool = libvirt_pool.default.name
@@ -90,12 +90,16 @@ resource "libvirt_volume" "vm_disk" {
 
   pool      = libvirt_pool.basic["vm-ssds"].name
   #type     = "file"
-  capacity  = 2147483648
+  capacity  = 10737418240
+  #capacity = 2147483648
+  #capacity  = 10
+  #capacity_unit = "GiB"
   target = {
     format = {
-    type   = "qcow2"
+      type   = "qcow2"
     }
   }
+  /*
   backing_store = {
     path = contains(keys(libvirt_volume.ISOs), "${each.value.image}") ?  libvirt_volume.ISOs["${each.value.image}"].path: libvirt_volume.alpine_images["${each.value.image}"].path
     format = {
@@ -104,21 +108,7 @@ resource "libvirt_volume" "vm_disk" {
       type = contains(keys(libvirt_volume.ISOs), "${each.value.image}") ?  "raw":"qcow2"
     }
   }
+  */
 }
 
-#resource "libvirt_pool" "vm" {
-#  name        = "vm-pool"
-#  type        = "dir"
-#  target      = {
-#    path = "/scratch/vm-pool"
-#  }
-#}
-
-#resource "libvirt_pool" "ssd" {
-#  name        = "ssd-pool"
-#  type        = "dir"
-#  target      = {
-#    path = "/scratch/ssd-pool"
-#  }
-#}
 

@@ -20,7 +20,7 @@ resource "libvirt_domain" "alpine" {
     type          = "hvm"
     #type_arch     = "x86_64"
     #type_machine  = "q35"
-    boot_devices = [ {dev = "hd"}]
+    boot_devices = [{dev = "hd"}, {dev = "cdrom"}]
 
     #kernel      = "/boot/vmlinuz"
     #initrd      = "/boot/initrd.img"
@@ -68,12 +68,24 @@ resource "libvirt_domain" "alpine" {
         }
         #boot = { order = 1 }
       },
+      /*
       {
         device = "cdrom"
         source = {
           volume = {
-            #pool   = libvirt_volume.alpine_seed_volume[count.index].pool
-            #volume = libvirt_volume.alpine_seed_volume[count.index].name
+            pool   = libvirt_volume.ISOs[each.value.image].pool
+            volume = libvirt_volume.ISOs[each.value.image].name
+          }
+        }
+        target = {
+          dev = "sdb"
+          bus = "sata"
+        }
+      }
+      {
+        device = "cdrom"
+        source = {
+          volume = {
             pool   = libvirt_volume.alpine_seed_volume[each.value.name].pool
             volume = libvirt_volume.alpine_seed_volume[each.value.name].name
           }
@@ -83,6 +95,7 @@ resource "libvirt_domain" "alpine" {
           bus = "sata"
         }
       }
+      */
     ]
 
     interfaces = [
