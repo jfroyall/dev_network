@@ -1,4 +1,5 @@
 
+DEST_DIR=~/scratch/
 SERVER=http://mirror.turnkeylinux.org/turnkeylinux/images/iso/
 
 APPS="core-18.1-bookworm \
@@ -7,6 +8,7 @@ APPS="core-18.1-bookworm \
       nginx-php-fastcgi-18.0-bookworm \
       redmine-18.1-bookworm \
       "
+APPS="core-18.1-bookworm" 
 
 echo $APPS
 for a in $APPS; do
@@ -17,7 +19,6 @@ for a in $APPS; do
   url="${SERVER}${file_name}"
   echo $url
   echo "---"
-  curl $url > tmp/$file_name
-
+  curl $url > ${DEST_DIR}$file_name
 
 done

@@ -1,5 +1,5 @@
 
-ROOT_DIR=/scratch/
+ROOT_DIR=~/scratch/
 for pool_name in  os-isos vm-ssds vm-images ; do
 
   echo "Building $pool_name"
