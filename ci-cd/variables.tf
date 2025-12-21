@@ -14,6 +14,26 @@ variable "all_images"{
               name: "core-turnkey"
               url : "file:///scratch/vault.qcow2"
             },
+            jenkins = {
+              name: "jenkins"
+              url : "file:///scratch/vm-images/jenkins.qcow2"
+            },
+            vault = {
+              name: "vault"
+              url : "file:///scratch/vm-images/vault.qcow2"
+            },
+            nginx = {
+              name: "nginx"
+              url : "file:///scratch/vm-images/nginx.qcow2"
+            },
+            my-sql = {
+              name: "my-sql"
+              url : "file:///scratch/vm-images/my-sql.qcow2"
+            },
+            #core = {
+            #  name: "core-turnkey"
+            #  url : "file:///scratch/vm-images/jenkins.qcow2"
+            #},
            }
   description ="The images required for the build."
 }
@@ -25,22 +45,10 @@ variable "all_isos"{
                     url  = string
                   }))
   default ={
-            redmine = {
-              name: "redmine"
-              url : "file:///scratch/turnkey-redmine-18.1-bookworm-amd64.iso"
-            },
-            jenkins = {
-              name: "jenkins"
-              url : "file:///scratch/turnkey-jenkins-18.1-bookworm-amd64.iso"
-            },
-            core = {
-              name: "core-turnkey"
-              url : "file:///scratch/turnkey-core-18.1-bookworm-amd64.iso"
-            },
-            nginx = {
-              name: "nginx"
-              url : "file:///scratch/turnkey-nginx-php-fastcgi-18.0-bookworm-amd64.iso"
-            },
+#            redmine = {
+#              name: "redmine"
+#              url : "file:///scratch/turnkey-redmine-18.1-bookworm-amd64.iso"
+#            },
            }
   description ="The ISOs required for the build."
 }
@@ -63,6 +71,7 @@ variable "all_vms"{
 
   default ={
             /*
+            */
             jumpbox = {
               name    : "jumpbox"
               sof_mem : 2*1024*1024*1024
@@ -70,7 +79,6 @@ variable "all_vms"{
               image   : "alpine"
               network : "outer-network"
             },
-            */
             vault = {
               name    : "vault"
               sof_mem : 5*1024*1024*1024

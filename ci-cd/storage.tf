@@ -1,17 +1,17 @@
 
 ## Basic pool (Note that 3 pools are constructed.)
-resource "libvirt_pool" "basic" {
-  for_each = toset(["os-isos", "vm-ssds", "vm-images"])
-  name = "${each.value}-pool"
-  type = "dir"
-  # source = {
-  #    host = "localhost" 
-  #   dir = "/scratch/scratch-pool" 
-  # }
-  target = {
-    path = "/scratch/${each.value}-pool"
-  }
-}
+#resource "libvirt_pool" "basic" {
+#  for_each = toset(["os-isos", "vm-ssds", "vm-images"])
+#  name = "${each.value}-pool"
+#  type = "dir"
+#  # source = {
+#  #    host = "localhost" 
+#  #   dir = "/scratch/scratch-pool" 
+#  # }
+#  target = {
+#    path = "/scratch/${each.value}-pool"
+#  }
+#}
 
 ## Volume from HTTP URL upload
 #resource "libvirt_volume" "alpine_base" {
@@ -29,56 +29,56 @@ resource "libvirt_pool" "basic" {
 #}
 
 ## Volume of prebuilt images
-resource "libvirt_volume" "alpine_images" {
-
-  for_each = var.all_images
-
-  name = "${each.value.name}.qcow2"
-  pool = libvirt_pool.basic["vm-images"].name
-  #format = "qcow2"
-
-  create = {
-    content = {
-      url = "${each.value.url}"
-    }
-  }
-}
+#resource "libvirt_volume" "alpine_images" {
+#
+##  for_each = var.all_images
+#
+#  name = "${each.value.name}.qcow2"
+#  pool = libvirt_pool.basic["vm-images"].name
+#  #format = "qcow2"
+#
+#  create = {
+#    content = {
+#      url = "${each.value.url}"
+#    }
+#  }
+#}
 
 ## Volumes of Turkey ISOs
-resource "libvirt_volume" "ISOs" {
-  
-  for_each = var.all_isos
-
-  name = "${each.value.name}.qcow2"
-  pool = libvirt_pool.basic["os-isos"].name
-
-  #pool = libvirt_pool.default.name
-  #format = "qcow2"
-  
-  #capacity = 1073741824
-
-  create = {
-    content = {
-      url = "${each.value.url}"
-    }
-  }
-}
+#resource "libvirt_volume" "ISOs" {
+#  
+#  for_each = var.all_isos
+#
+#  name = "${each.value.name}.qcow2"
+#  pool = libvirt_pool.basic["os-isos"].name
+#
+#  #pool = libvirt_pool.default.name
+#  #format = "qcow2"
+#  
+#  #capacity = 1073741824
+#
+#  create = {
+#    content = {
+#      url = "${each.value.url}"
+#    }
+#  }
+#}
 
 
 
 
 ## Basic pool
-resource "libvirt_pool" "default" {
-  name = "scratch-pool"
-  type = "dir"
-  # source = {
-  #    host = "localhost" 
-  #   dir = "/scratch/scratch-pool" 
-  # }
-  target = {
-    path = "/scratch/scratch-pool"
-  }
-}
+#resource "libvirt_pool" "default" {
+#  name = "scratch-pool"
+#  type = "dir"
+#  # source = {
+#  #    host = "localhost" 
+#  #   dir = "/scratch/scratch-pool" 
+#  # }
+#  target = {
+#    path = "/scratch/scratch-pool"
+#  }
+#}
 
 
 ## Writable copy-on-write layer for the VM.
@@ -88,7 +88,8 @@ resource "libvirt_volume" "vm_disk" {
 
   name = "${each.value.name}.qcow2"
 
-  pool      = libvirt_pool.basic["vm-ssds"].name
+  #pool      = libvirt_pool.basic["vm-ssds"].name
+  pool      = "vm-ssds"
   #type     = "file"
   capacity  = 10737418240
   #capacity = 2147483648
@@ -97,6 +98,14 @@ resource "libvirt_volume" "vm_disk" {
   target = {
     format = {
       type   = "qcow2"
+    }
+  }
+  backing_store = {
+    path   =  libvirt_volume.alpine_images["${each.value.image}"].path
+    format = {
+      type = "qcow2"
+      #type = "raw"
+      #type = contains(keys(libvirt_volume.ISOs), "${each.value.image}") ?  "raw":"qcow2"
     }
   }
   /*
