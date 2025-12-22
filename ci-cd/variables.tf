@@ -70,6 +70,8 @@ variable "all_vms"{
                   }))
 
   default ={
+            /*
+            */
             jumpbox = {
               name    : "jumpbox"
               sof_mem : 2*1024*1024*1024
@@ -77,27 +79,41 @@ variable "all_vms"{
               image   : "alpine"
               network : "outer-network"
             },
-            /*
             vault = {
               name    : "vault"
-              sof_mem : 5*1024*1024*1024
-              sof_disk: 5*1024*1024*10240
+              sof_mem : 4*1024*1024*1024
+              sof_disk: 10*1024*1024*10240
               image   : "vault"
               network : "outer-network"
             },
+            /*
             */
             /*
             ns1 = {
               name    : "ns1"
-              sof_mem : "0"
-              sof_disk: "0"
+              sof_mem : 4*1024*1024*10240"0"
+              sof_disk: 10*1024*1024*10240"0"
               image   : "core"
+              network : "outer-network"
+            },
+            my-sql = {
+              name    : "my-sql"
+              sof_mem : 4*1024*1024*10240"0"
+              sof_disk: 20*1024*1024*10240"0"
+              image   : "my-sql"
+              network : "inner-network"
+            },
+            nginx = {
+              name    : "nginx"
+              sof_mem : 4*1024*1024*10240"0"
+              sof_disk: 20*1024*1024*10240"0"
+              image   : "nginx"
               network : "outer-network"
             },
             jenkins = {
               name    : "jenkins"
-              sof_mem : "0"
-              sof_disk: "0"
+              sof_mem : 4*1024*1024*10240"0"
+              sof_disk: 10*1024*1024*10240"0"
               image   : "jenkins"
               network : "inner-network"
             },
