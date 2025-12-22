@@ -173,12 +173,14 @@ The bulk of the deployment and configuration will use:
             1. The `ntp` image.
             1. The `dns` image.
             1. The `smtp` image.
-      1. Use these QCOW2 files as backing stores for the VMs.
       1. Remove the dynamic construction of the pools and volumes from the
       `Terraform` scripts.
    - Building `qcow2` images...
       1. The `vault` image---using the 'core' ISO.
       1. ~~The `nginx` image.~~
-      1. The `jenkins` image.
+      1. ~~The `jenkins` image.~~
+      1. ~~The `my-sql` image.~~
       1. The `redmine` image.
-      1. The `my-sql` image.
+
+- 22 Dec 2025
+   - Got `vault` and `jumpbox` to build.
