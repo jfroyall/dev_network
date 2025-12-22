@@ -7,4 +7,10 @@ for pool_name in  os-isos vm-ssds vm-images ; do
                         --type dir \
                         --target ${ROOT_DIR}${pool_name} \
                         --build
+  if [ $? -ne 0 ]; then
+    echo Failed the pool-create-as!
+    exit 1
+  fi
 done
+virsh pool-refresh vm-images
+

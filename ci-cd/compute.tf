@@ -53,8 +53,8 @@ resource "libvirt_domain" "alpine" {
       {
         source = {
           volume = {
-            pool   = libvirt_volume.vm_disk[each.value.name].pool
-            volume = libvirt_volume.vm_disk[each.value.name].name
+            pool   = "vm-images"
+            volume = "${each.value.name}.qcow2"
           }
         }
         target = {
@@ -82,6 +82,7 @@ resource "libvirt_domain" "alpine" {
           bus = "sata"
         }
       }
+      */
       {
         device = "cdrom"
         source = {
@@ -95,7 +96,6 @@ resource "libvirt_domain" "alpine" {
           bus = "sata"
         }
       }
-      */
     ]
 
     interfaces = [

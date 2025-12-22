@@ -70,8 +70,6 @@ variable "all_vms"{
                   }))
 
   default ={
-            /*
-            */
             jumpbox = {
               name    : "jumpbox"
               sof_mem : 2*1024*1024*1024
@@ -79,6 +77,7 @@ variable "all_vms"{
               image   : "alpine"
               network : "outer-network"
             },
+            /*
             vault = {
               name    : "vault"
               sof_mem : 5*1024*1024*1024
@@ -86,6 +85,7 @@ variable "all_vms"{
               image   : "vault"
               network : "outer-network"
             },
+            */
             /*
             ns1 = {
               name    : "ns1"
