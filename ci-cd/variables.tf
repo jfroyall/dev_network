@@ -10,6 +10,8 @@ variable "all_images"{
               name = "alpine-3.22.2"
               url = "https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/generic_alpine-3.22.2-x86_64-bios-cloudinit-r0.qcow2"
             },
+            /*
+            */
             vault = {
               name: "core-turnkey"
               url : "file:///scratch/vault.qcow2"
@@ -86,34 +88,34 @@ variable "all_vms"{
               image   : "vault"
               network : "outer-network"
             },
+            nginx = {
+              name    : "nginx"
+              sof_mem : 4*1024*1024*10240
+              sof_disk: 20*1024*1024*10240
+              image   : "nginx"
+              network : "outer-network"
+            },
             /*
             */
             /*
             ns1 = {
               name    : "ns1"
-              sof_mem : 4*1024*1024*10240"0"
-              sof_disk: 10*1024*1024*10240"0"
+              sof_mem : 4*1024*1024*10240
+              sof_disk: 10*1024*1024*10240
               image   : "core"
               network : "outer-network"
             },
             my-sql = {
               name    : "my-sql"
-              sof_mem : 4*1024*1024*10240"0"
-              sof_disk: 20*1024*1024*10240"0"
+              sof_mem : 4*1024*1024*10240
+              sof_disk: 20*1024*1024*10240
               image   : "my-sql"
               network : "inner-network"
             },
-            nginx = {
-              name    : "nginx"
-              sof_mem : 4*1024*1024*10240"0"
-              sof_disk: 20*1024*1024*10240"0"
-              image   : "nginx"
-              network : "outer-network"
-            },
             jenkins = {
               name    : "jenkins"
-              sof_mem : 4*1024*1024*10240"0"
-              sof_disk: 10*1024*1024*10240"0"
+              sof_mem : 4*1024*1024*10240
+              sof_disk: 10*1024*1024*10240
               image   : "jenkins"
               network : "inner-network"
             },

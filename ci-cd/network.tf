@@ -61,14 +61,14 @@ resource "libvirt_network" "outer" {
 
     #managed = false
 
-    mode = "nat"
+    mode = "route"
 
-    nat = {
-      port = {
-        start = 1024
-        end   = 65535
-      }
-    }
+#    nat = {
+#      port = {
+#        start = 1024
+#        end   = 65535
+#      }
+#    }
 
   }
 }

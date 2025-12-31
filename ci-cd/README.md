@@ -184,3 +184,39 @@ The bulk of the deployment and configuration will use:
 
 - 22 Dec 2025
    - Got `vault` and `jumpbox` to build.
+   - Decided to rework it again.  This time I am thinking of building the
+     jumpbox, nginx, vault, ansible, jenkins and proxmox images by hand.  The proxmox would
+     host the jenkins workers.
+
+     The jumpbox would be a simple alpine image.  The nginx, vault and jenkins images
+     would be taken from Turnkey.  The jenkins workers would ultimately be
+     containers hosted by proxmox, but at first they  would be full VMs.
+
+     I could use `terraform import` to get a snapshot of the full infrastructure. I
+     would need a diffent tool to get snapshots of the deployment.
+
+     I would use the ansible image to configure the rest of the images.
+
+   - How do test that the VMs were successfully deployed and configured?
+      - The Terraform Vault tutorials give a good example for `vault`.
+      - Use `ping`?
+      - Use `curl` and the API?
+      - Use `Ansible` to load a test?
+
+- 23 Dec 2025
+   - This is the new plan:
+      - Use terraform to build the networks.
+      - Build the jumpbox VM.
+      - Build the NGINX VM.
+      - Build vault
+      - Build jenkins
+   - Placed jumpbox, nginx and vault in the "management.dabilly.home" DNS
+     zone.
+   - Creating the certificates:
+      - Creating a root SSL certificate for "dabilly.home"
+      - Creating an intermediate  SSL certificate for "management.dabilly.home"
+      - Creating SSL certificates for:
+          - "management.management.dabilly.home"
+          - "vault.management.dabilly.home"
+          - "nginx.management.dabilly.home"
+  
