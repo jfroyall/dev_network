@@ -146,7 +146,7 @@ The bulk of the deployment and configuration will use:
 
 - 20 Dec 2025
    - Ran into a problem with the ISO images.  I am using the ISO as a backing
-     store, but the ISO is used to boot the VM.  The boot scripts therfore try
+     store, but the ISO is used to boot the VM.  The boot scripts therefore try
      to write the ISO.  That is, the script is trying to alter the booting medium.
 
      I am going to change the configuration so that the initial construction
