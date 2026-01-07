@@ -77,21 +77,21 @@ variable "all_vms"{
             jumpbox = {
               name    : "jumpbox"
               sof_mem : 2*1024*1024*1024
-              sof_disk: 5*1024*1024*1024
+              sof_disk: 4*1024*1024*1024
               image   : "alpine"
               network : "outer-network"
             },
             vault = {
               name    : "vault"
-              sof_mem : 4*1024*1024*1024
-              sof_disk: 10*1024*1024*10240
+              sof_mem : 2*1024*1024*1024
+              sof_disk: 4*1024*1024*10240
               image   : "vault"
               network : "outer-network"
             },
             nginx = {
               name    : "nginx"
-              sof_mem : 4*1024*1024*10240
-              sof_disk: 20*1024*1024*10240
+              sof_mem : 2*1024*1024*10240
+              sof_disk: 4*1024*1024*10240
               image   : "nginx"
               network : "outer-network"
             },

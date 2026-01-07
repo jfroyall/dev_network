@@ -1,6 +1,8 @@
 
-ROOT_DIR=~/scratch/
-for pool_name in  os-isos vm-ssds vm-images ; do
+ROOT_DIR=${HOME}/scratch/
+#POOL_NAMES= os-isos vm-ssds vm-images 
+POOL_NAMES=vm-templates
+for pool_name in  ${POOL_NAMES} ; do
 
   echo "Building $pool_name"
   virsh pool-create-as $pool_name \
