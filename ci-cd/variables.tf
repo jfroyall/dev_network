@@ -7,14 +7,22 @@ variable "all_images"{
                   }))
   default ={
             alpine = {
-              name = "alpine-3.22.2"
-              url = "https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/generic_alpine-3.22.2-x86_64-bios-cloudinit-r0.qcow2"
+              name = "alpine-3.23"
+              url = "https://dl-cdn.alpinelinux.org/v3.23/releases/cloud/generic_alpine-3.23.0-x86_64-bios-cloudinit-r0.qcow2"
+              #url = "https://dl-cdn.alpinelinux.org/v3.23/releases/cloud/generic_alpine-3.23.0-x86_64-uefi-cloudinit-r0.qcow2"
             },
             /*
-            */
             vault = {
               name: "core-turnkey"
               url : "file:///scratch/vault.qcow2"
+            },
+            jumpbox = {
+              name: "jumpbox"
+              url : "file:///scratch/vm-images/nginx.qcow2"
+            },
+            nginx = {
+              name: "nginx"
+              url : "file:///scratch/vm-images/nginx.qcow2"
             },
             jenkins = {
               name: "jenkins"
@@ -24,10 +32,6 @@ variable "all_images"{
               name: "vault"
               url : "file:///scratch/vm-images/vault.qcow2"
             },
-            nginx = {
-              name: "nginx"
-              url : "file:///scratch/vm-images/nginx.qcow2"
-            },
             my-sql = {
               name: "my-sql"
               url : "file:///scratch/vm-images/my-sql.qcow2"
@@ -36,6 +40,7 @@ variable "all_images"{
             #  name: "core-turnkey"
             #  url : "file:///scratch/vm-images/jenkins.qcow2"
             #},
+            */
            }
   description ="The images required for the build."
 }
@@ -85,14 +90,14 @@ variable "all_vms"{
               name    : "vault"
               sof_mem : 2*1024*1024*1024
               sof_disk: 4*1024*1024*10240
-              image   : "vault"
+              image   : "alpine"
               network : "outer-network"
             },
             nginx = {
               name    : "nginx"
               sof_mem : 2*1024*1024*10240
               sof_disk: 4*1024*1024*10240
-              image   : "nginx"
+              image   : "alpine"
               network : "outer-network"
             },
             /*
