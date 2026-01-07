@@ -1,30 +1,33 @@
 
-## Basic pool (Note that 3 pools are constructed.)
-#resource "libvirt_pool" "basic" {
-#  for_each = toset(["os-isos", "vm-ssds", "vm-images"])
-#  name = "${each.value}-pool"
-#  type = "dir"
-#  # source = {
-#  #    host = "localhost" 
-#  #   dir = "/scratch/scratch-pool" 
-#  # }
-#  target = {
-#    path = "/scratch/${each.value}-pool"
-#  }
-#}
+# Basic pool (Note that 3 pools are constructed.)
+resource "libvirt_pool" "basic" {
+  #for_each = toset(["os-isos", "vm-ssds", "vm-images"])
+  for_each = toset(["os-isos", "vm-templates"])
+  name = "${each.value}"
+  type = "dir"
+  # source = {
+  #    host = "localhost" 
+  #   dir = "/scratch/scratch-pool" 
+  # }
+  target = {
+    path = "/scratch/${each.value}-pool"
+  }
+}
 
 ## Volume from HTTP URL upload
 resource "libvirt_volume" "alpine_base" {
-  #name = "alpine-3.22.2.qcow2"
-  name = "jumpbox.qcow2"
-  #pool = libvirt_pool.basic["vm-images"].name
-  pool = "vm-images"
+  name = "alpine-3.23.qcow2"
+  #name = "jumpbox.qcow2"
+  pool = libvirt_pool.basic["vm-templates"].name
+  #pool = "vm-templates"
   #format = "qcow2"
   # capacity is automatically computed from Content-Length header
 
   create = {
     content = {
-      url = "https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/generic_alpine-3.22.2-x86_64-bios-cloudinit-r0.qcow2"
+      #url = "https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/generic_alpine-3.22.2-x86_64-bios-cloudinit-r0.qcow2"
+
+      url = "https://dl-cdn.alpinelinux.org/v3.23/releases/cloud/generic_alpine-3.23.0-x86_64-uefi-cloudinit-r0.qcow2"
     }
   }
 }

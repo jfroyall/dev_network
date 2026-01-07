@@ -1,10 +1,13 @@
 #!/bin/bash
 
-pool_name=vm-ssds
-volume_name=jumpbox.qcow2
-capacity=10Gib
-allocation=1Gib
-backing_volume=/scratch/alpine-vm-save.qcow2
+set +x
+
+pool_name=vm-templates
+volume_name=alpine-vm.qcow2
+capacity=4Gib
+allocation=4Gib
+#backing_volume=/scratch/alpine-vm-save.qcow2
+backing_volume=${HOME}/Scratch/alpine-template.qcow2
 
 virsh vol-create-as \
           --pool $pool_name \
