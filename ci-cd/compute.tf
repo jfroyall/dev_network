@@ -54,7 +54,7 @@ resource "libvirt_domain" "alpine" {
         source = {
           volume = {
             pool   = "vm-images"
-            volume = "${each.value.name}.qcow2"
+            volume = libvirt_volume.vm_disk["${each.value.name}"].name
           }
         }
         target = {
@@ -109,6 +109,15 @@ resource "libvirt_domain" "alpine" {
             network = "outer-network"
           }
         }
+      }
+    ]
+
+    serials = [
+      {
+      }
+    ]
+    consoles = [
+      {
       }
     ]
 
