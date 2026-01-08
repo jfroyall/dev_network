@@ -1,23 +1,9 @@
 
-# Basic pool (Note that 3 pools are constructed.)
-resource "libvirt_pool" "basic" {
-  #for_each = toset(["os-isos", "vm-ssds", "vm-images"])
-  for_each = toset(["os-isos", "vm-templates", "vm-images"])
-  name = "${each.value}"
-  type = "dir"
-  # source = {
-  #    host = "localhost" 
-  #   dir = "/scratch/scratch-pool" 
-  # }
-  target = {
-    path = "/scratch/${each.value}-pool"
-  }
-}
-
 ## Volume from HTTP URL upload
 resource "libvirt_volume" "alpine_base" {
   name = format("%s.qcow2", var.all_images["alpine"].name)
-  pool = libvirt_pool.basic["vm-templates"].name
+  #pool = libvirt_pool.basic["vm-templates"].name
+  pool = "vm-templates"
   #format = "qcow2"
   # capacity is automatically computed from Content-Length header
 
@@ -34,7 +20,8 @@ resource "libvirt_volume" "alpine_images" {
   for_each = var.all_images
 
   name = "${each.value.name}.qcow2"
-  pool = libvirt_pool.basic["vm-images"].name
+  #pool = libvirt_pool.basic["vm-images"].name
+  pool = "vm-images"
   #format = "qcow2"
 
   create = {
@@ -51,9 +38,8 @@ resource "libvirt_volume" "vm_disk" {
 
   name = "${each.value.name}.qcow2"
 
-  #pool      = libvirt_pool.basic["vm-ssds"].name
-  #pool      = "vm-ssds"
-  pool      = libvirt_pool.basic["vm-images"].name
+  #pool      = libvirt_pool.basic["vm-images"].name
+  pool      = "vm-images"
   #type     = "file"
   capacity  = "${each.value.sof_disk}"
   #capacity = 2147483648
