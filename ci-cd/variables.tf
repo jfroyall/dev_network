@@ -1,4 +1,11 @@
 
+
+variable "all_pools" {
+  type    = set(string)
+  default = ["os-isos", "vm-templates", "vm-images"]
+  description ="The pools required for the build."
+}
+
 #The images required.  Note that the index is the name of the VM.
 variable "all_images"{
   type = map(object({
@@ -59,6 +66,7 @@ variable "all_isos"{
            }
   description ="The ISOs required for the build."
 }
+
 
 
 ## ## ## ## ## ## ## ## ## ##

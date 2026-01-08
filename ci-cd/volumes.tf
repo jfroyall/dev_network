@@ -2,8 +2,7 @@
 ## Volume from HTTP URL upload
 resource "libvirt_volume" "alpine_base" {
   name = format("%s.qcow2", var.all_images["alpine"].name)
-  #pool = libvirt_pool.basic["vm-templates"].name
-  pool = "vm-templates"
+  pool = libvirt_pool.basic["vm-templates"].name
   #format = "qcow2"
   # capacity is automatically computed from Content-Length header
 
@@ -20,8 +19,7 @@ resource "libvirt_volume" "alpine_images" {
   for_each = var.all_images
 
   name = "${each.value.name}.qcow2"
-  #pool = libvirt_pool.basic["vm-images"].name
-  pool = "vm-images"
+  pool = libvirt_pool.basic["vm-images"].name
   #format = "qcow2"
 
   create = {
@@ -38,8 +36,7 @@ resource "libvirt_volume" "vm_disk" {
 
   name = "${each.value.name}.qcow2"
 
-  #pool      = libvirt_pool.basic["vm-images"].name
-  pool      = "vm-images"
+  pool      = libvirt_pool.basic["vm-images"].name
   #type     = "file"
   capacity  = "${each.value.sof_disk}"
   #capacity = 2147483648

@@ -16,8 +16,9 @@
 #}
 #
 #
+
 #
-## Cloud-init seed ISO.
+# Cloud-init seed ISO.
 resource "libvirt_cloudinit_disk" "alpine_seed" {
 
   for_each = var.all_vms
@@ -39,7 +40,7 @@ resource "libvirt_cloudinit_disk" "alpine_seed" {
   EOF
 }
 #
-## Upload the cloud-init ISO into the pool.
+# Upload the cloud-init ISO into the pool.
 resource "libvirt_volume" "alpine_seed_volume" {
 
   for_each = var.all_vms

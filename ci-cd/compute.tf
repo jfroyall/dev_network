@@ -55,6 +55,7 @@ resource "libvirt_domain" "alpine" {
           volume = {
             pool   = "vm-images"
             volume = libvirt_volume.vm_disk["${each.value.name}"].name
+            #volume = "${each.value.name}.qcow2"
           }
         }
         target = {
@@ -68,13 +69,14 @@ resource "libvirt_domain" "alpine" {
         }
         #boot = { order = 1 }
       },
+
       /*
       {
         device = "cdrom"
         source = {
           volume = {
-            pool   = libvirt_volume.ISOs[each.value.image].pool
-            volume = libvirt_volume.ISOs[each.value.image].name
+            pool   = libvirt_volume.ISOs["${each.value.image}"].pool
+            volume = libvirt_volume.ISOs["${each.value.image}"].name
           }
         }
         target = {
@@ -83,12 +85,13 @@ resource "libvirt_domain" "alpine" {
         }
       }
       */
+
       {
         device = "cdrom"
         source = {
           volume = {
-            pool   = libvirt_volume.alpine_seed_volume[each.value.name].pool
-            volume = libvirt_volume.alpine_seed_volume[each.value.name].name
+            pool   = libvirt_volume.alpine_seed_volume["${each.value.name}"].pool
+            volume = libvirt_volume.alpine_seed_volume["${each.value.name}"].name
           }
         }
         target = {
