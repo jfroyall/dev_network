@@ -2,9 +2,9 @@
 
 
 #cloud-config
-hostname: myhost
+#hostname: myhost
 create_hostname_file: true
-fqdn: myhost.{{libvirt_network.outer.domain.name}}
+#fqdn: myhost.{{libvirt_network.outer.domain.name}}
 prefer_fqdn_over_hostname: true
 
 #chpasswd:
@@ -48,8 +48,8 @@ users:
 
 timezone: UTC
 
-  - [ls, -l, /]
-  - [sh, -xc, 'echo $(date) '': hello world!''']
-  - [sh, -c, echo "=========hello world'========="]
-  - ls -l /root
+#  - [ls, -l, /]
+#  - [sh, -xc, 'echo $(date) '': hello world!''']
+#  - [sh, -c, echo "=========hello world'========="]
+#  - ls -l /root
 
