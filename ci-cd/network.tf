@@ -46,7 +46,7 @@ resource "libvirt_network" "outer" {
 
   domain = {
     local_only = "yes"
-    name       = "management.dabilly.home"
+    name       = "control.dabilly.home"
     register   = "yes"
   }
 

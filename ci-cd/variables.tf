@@ -1,5 +1,13 @@
 
 
+variable "all_user_data" {
+  type = map(string)
+
+  default ={
+    standard = "user-data.yaml.tpl",
+    ansible  = "ansible-user-data.yaml.tpl"
+  }
+}
 variable "all_pools" {
   type    = set(string)
   default = ["os-isos", "vm-templates", "vm-images"]
@@ -15,7 +23,8 @@ variable "all_images"{
   default ={
             alpine = {
               name = "alpine-3.23"
-              url = "https://dl-cdn.alpinelinux.org/v3.23/releases/cloud/generic_alpine-3.23.0-x86_64-bios-cloudinit-r0.qcow2"
+              url = "https://dl-cdn.alpinelinux.org/v3.23/releases/cloud/nocloud_alpine-3.23.0-x86_64-bios-cloudinit-r0.qcow2"
+              #url = "https://dl-cdn.alpinelinux.org/v3.23/releases/cloud/generic_alpine-3.23.0-x86_64-bios-cloudinit-r0.qcow2"
               #url = "https://dl-cdn.alpinelinux.org/v3.23/releases/cloud/generic_alpine-3.23.0-x86_64-uefi-cloudinit-r0.qcow2"
             },
             /*
@@ -82,6 +91,7 @@ variable "all_vms"{
                     sof_disk = number
                     image    = string
                     network  = string
+                    user_data  = string
                   }))
 
   default ={
@@ -93,6 +103,7 @@ variable "all_vms"{
               sof_disk: 4*1024*1024*1024
               image   : "alpine"
               network : "outer-network"
+              user_data : "user-data.yaml.tpl"
             },
             vault = {
               name    : "vault"
@@ -100,6 +111,7 @@ variable "all_vms"{
               sof_disk: 4*1024*1024*10240
               image   : "alpine"
               network : "outer-network"
+              user_data : "vault-user-data.yaml.tpl"
             },
             nginx = {
               name    : "nginx"
@@ -107,6 +119,15 @@ variable "all_vms"{
               sof_disk: 4*1024*1024*10240
               image   : "alpine"
               network : "outer-network"
+              user_data : "user-data.yaml.tpl"
+            },
+            ansible = {
+              name    : "ansible"
+              sof_mem : 2*1024*1024*10240
+              sof_disk: 4*1024*1024*10240
+              image   : "alpine"
+              network : "outer-network"
+              user_data : "ansible-user-data.yaml.tpl"
             },
             /*
             */
