@@ -25,7 +25,9 @@ resource "libvirt_cloudinit_disk" "alpine_seed" {
 
   name = "alpine-cloudinit"
 
-  user_data = file("user-data.yaml")
+  #user_data = file("user-data.yaml")
+  #user_data = templatefile("user-data.yaml.tpl",  { host_name = "${each.value.name}", domain_name=libvirt_network.outer.domain.name})
+  user_data = templatefile(each.value.user_data,  { host_name = "${each.value.name}", domain_name=libvirt_network.outer.domain.name})
 
   meta_data = <<-EOF
     instance-id: ${each.value.name}

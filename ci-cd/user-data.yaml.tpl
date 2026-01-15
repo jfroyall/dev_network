@@ -2,9 +2,10 @@
 
 
 #cloud-config
-#hostname: myhost
+hostname: ${host_name}
 create_hostname_file: true
 #fqdn: myhost.{{libvirt_network.outer.domain.name}}
+fqdn: ${host_name}.${domain_name}
 prefer_fqdn_over_hostname: true
 
 #chpasswd:
@@ -29,13 +30,6 @@ users:
     lock_passwd: false
     plain_text_passwd: password
 
-  - name: foobar
-    shell: /bin/sh
-    lock_passwd: false
-    plain_text_passwd: foobar
-
-
-
   - name: ansible
     gecos: Ansible User
     groups: users,admin,wheel
@@ -52,4 +46,11 @@ timezone: UTC
 #  - [sh, -xc, 'echo $(date) '': hello world!''']
 #  - [sh, -c, echo "=========hello world'========="]
 #  - ls -l /root
+bootcmd:
+  - [sh, -xc, 'echo $(date) '': hello world!''']
+
+runcmd:
+  - [sh, -c, echo "=========hello world'========="]
+  - [apk, update]
+  - [apk, upgrade]
 
