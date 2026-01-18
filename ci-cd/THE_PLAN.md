@@ -93,10 +93,10 @@ objects.  These objects should include the following members:
 
 ### Build the storage pools and volumes
 - The pools are:
-  1. `os-isos`; storage for the ISOs required for the deployment.
-  1. `vm-templates`; storage for the 'cloud' images.  For example the Alpine
+  1. `os-isos`: Storage for the ISOs required for the deployment.
+  1. `vm-templates`: Storage for the 'cloud' images.  For example the Alpine
   `QCOW2` images.
-  1. `vm-images`; storage for the backstore for VM instances.
+  1. `vm-images`: Storage for the backstore for VM instances.
 Note that the names are subject to change.
 - The volumes are <span style="color:red">**TBD**</span>.
 ### Deploy the initial VMs
@@ -113,5 +113,12 @@ Note that the names are subject to change.
 
 ## Subsequent passes
 ### Update the secrets
+Add to the `ansible-vault` secret data base.  Subsequently add to the `vault`,
+using the `ansible` updates.
 ### Deploy the extra VMs
+The extra VMs include:
+- `redmine`
+- `baracuda`
+- `nginx`
+- `cuda`
 ### Configure the extra VMs
