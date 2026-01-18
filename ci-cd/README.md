@@ -220,3 +220,23 @@ The bulk of the deployment and configuration will use:
           - "vault.management.dabilly.home"
           - "nginx.management.dabilly.home"
   
+- 17 Jan 2026
+   - Did a lot of work in the `vault-work` directory.  I also tried to build
+     things on the Mac with `UTM`, `VMware-Fusion` and directly with `QEMU`.
+     I picked up a lot of bits and pieces but it is time to get back to the
+     Linux box and use `libvirt`.  I will probably port to `Proxmox` before I
+     try it on Google-Cloud.
+
+   - The domain names are going to be `control.office.home` and
+     `internal.office.home`.  The `nginx` and the jumpbox will be on the
+     `control` VLAN.
+
+   - I may not need to build a DNS server with `libvirt`.  But, in case that I
+     do, I did so with a couple of `Alpine` VMs under `VMware-Fusion`.
+
+   - I don't know if I should use a VM for Ansible or if I should install it
+     on the desktop.  A VM sounds a lot easier.
+
+   - I also must plan for backups of the work which may be on VM instances.
+
+   - I also must plan for backups of the work which may be on VM instances.

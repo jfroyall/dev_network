@@ -7,6 +7,6 @@ resource "libvirt_pool" "basic" {
     name = "${each.value}"
     type = "dir"
     target = {
-      path = "/scratch/${each.value}-pool"
+      path = "${var.scratch_dir}/${each.value}-pool"
     }
 }
