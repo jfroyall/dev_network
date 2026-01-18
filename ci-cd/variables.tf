@@ -164,6 +164,84 @@ variable "all_vms"{
   description ="The set of all VMs which will be created."
 }
 
+
+variable "all_inner_networks"{
+  type = map(object({
+                    name   = string
+                    ip     = string
+                    prefix = string
+                    start  = string
+                    end    = string
+                    domain_name  = string
+                  }))
+
+  default ={
+            internal_office_home = {
+                                  name   = "internal_office_home"
+                                  ip     = "172.16.18.0"
+                                  prefix = "24"
+                                  start  = "172.16.18.129"
+                                  end    = "172.16.18.192"
+                                  domain_name  = "internal.office.home"
+                                  }
+            internal_dev_home = {
+                                  name   = "internal_dev_home"
+                                  ip     = "172.17.18.0"
+                                  prefix = "24"
+                                  start  = "172.17.18.129"
+                                  end    = "172.17.18.192"
+                                  domain_name  = "internal.dev.home"
+                                  }
+            internal_test_home = {
+                                  name   = "internal_test_home"
+                                  ip     = "172.18.18.0"
+                                  prefix = "24"
+                                  start  = "172.18.18.129"
+                                  end    = "172.18.18.192"
+                                  domain_name  = "internal.test.home"
+                                  }
+           }
+  description ="The set of all networks which will be created."
+}
+variable "all_control_networks"{
+  type = map(object({
+                    name   = string
+                    ip     = string
+                    prefix = string
+                    start  = string
+                    end    = string
+                    domain_name  = string
+                  }))
+
+  default ={
+            control_office_home = {
+                                  name   = "control_office_home"
+                                  ip     = "172.16.17.0"
+                                  prefix = "24"
+                                  start  = "172.16.17.129"
+                                  end    = "172.16.17.192"
+                                  domain_name  = "control.office.home"
+                                  }
+            control_dev_home = {
+                                  name   = "control_dev_home"
+                                  ip     = "172.17.17.0"
+                                  prefix = "24"
+                                  start  = "172.17.17.129"
+                                  end    = "172.17.17.192"
+                                  domain_name  = "control.dev.home"
+                                  }
+            control_test_home = {
+                                  name   = "control_test_home"
+                                  ip     = "172.18.17.0"
+                                  prefix = "24"
+                                  start  = "172.18.17.129"
+                                  end    = "172.18.17.192"
+                                  domain_name  = "control.test.home"
+                                  }
+           }
+  description ="The set of all networks which will be created."
+}
+
 variable "vm_condition_poweron" {
   description = "Set to true if the instances are defined"
   default = true

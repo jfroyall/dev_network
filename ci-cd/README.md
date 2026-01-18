@@ -245,3 +245,4 @@ The bulk of the deployment and configuration will use:
    - Added the file named `THE_PLAN.md`.
    - Moved the `compute.tf` and `volumes.tf` to the directory `tf-files`.
      This is my way to simplify the construction.
+   - Created multiple networks.
