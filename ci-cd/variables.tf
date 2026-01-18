@@ -1,4 +1,9 @@
 
+variable "scratch_dir" {
+  type = string
+  default = "/Users/jean/Scratch"
+  description ="The scratch directory."
+}
 
 variable "all_user_data" {
   type = map(string)
