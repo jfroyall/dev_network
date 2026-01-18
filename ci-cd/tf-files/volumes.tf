@@ -1,17 +1,17 @@
 
 ## Volume from HTTP URL upload
-resource "libvirt_volume" "alpine_base" {
-  name = format("%s.qcow2", var.all_images["alpine"].name)
-  pool = libvirt_pool.basic["vm-templates"].name
-  #format = "qcow2"
-  # capacity is automatically computed from Content-Length header
-
-  create = {
-    content = {
-      url = var.all_images["alpine"].url
-    }
-  }
-}
+#resource "libvirt_volume" "alpine_base" {
+#  name = format("%s.qcow2", var.all_images["alpine"].name)
+#  pool = libvirt_pool.basic["vm-templates"].name
+#  #format = "qcow2"
+#  # capacity is automatically computed from Content-Length header
+#
+#  create = {
+#    content = {
+#      url = var.all_images["alpine"].url
+#    }
+#  }
+#}
 
 ## Volume of prebuilt images
 resource "libvirt_volume" "alpine_images" {

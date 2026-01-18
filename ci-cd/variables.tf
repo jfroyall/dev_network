@@ -1,7 +1,8 @@
 
 variable "scratch_dir" {
   type = string
-  default = "/Users/jean/Scratch"
+  #default = "/Users/jean/Scratch"
+  default = "/scratch"
   description ="The scratch directory."
 }
 
@@ -104,32 +105,32 @@ variable "all_vms"{
             */
             jumpbox = {
               name    : "jumpbox"
-              sof_mem : 2*1024*1024*1024
-              sof_disk: 4*1024*1024*1024
+              sof_mem : 1*1024*1024*1024
+              sof_disk: 2*1024*1024*1024
               image   : "alpine"
               network : "outer-network"
               user_data : "user-data.yaml.tpl"
             },
             vault = {
               name    : "vault"
-              sof_mem : 2*1024*1024*1024
-              sof_disk: 4*1024*1024*10240
+              sof_mem : 1*1024*1024*1024
+              sof_disk: 2*1024*1024*10240
               image   : "alpine"
               network : "outer-network"
               user_data : "vault-user-data.yaml.tpl"
             },
             nginx = {
               name    : "nginx"
-              sof_mem : 2*1024*1024*10240
-              sof_disk: 4*1024*1024*10240
+              sof_mem : 1*1024*1024*10240
+              sof_disk: 2*1024*1024*10240
               image   : "alpine"
               network : "outer-network"
               user_data : "user-data.yaml.tpl"
             },
             ansible = {
               name    : "ansible"
-              sof_mem : 2*1024*1024*10240
-              sof_disk: 4*1024*1024*10240
+              sof_mem : 1*1024*1024*10240
+              sof_disk: 2*1024*1024*10240
               image   : "alpine"
               network : "outer-network"
               user_data : "ansible-user-data.yaml.tpl"

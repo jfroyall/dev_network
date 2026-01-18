@@ -240,3 +240,8 @@ The bulk of the deployment and configuration will use:
    - I also must plan for backups of the work which may be on VM instances.
 
    - I also must plan for backups of the work which may be on VM instances.
+
+- 18 Jan 2026
+   - Added the file named `THE_PLAN.md`.
+   - Moved the `compute.tf` and `volumes.tf` to the directory `tf-files`.
+     This is my way to simplify the construction.
