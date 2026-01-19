@@ -13,7 +13,7 @@
 #  }
 #}
 
-## Volume of prebuilt images
+## Volume of for a prebuilt image (used as a backing store)
 resource "libvirt_volume" "alpine_images" {
 
   for_each = var.all_images
@@ -32,9 +32,13 @@ resource "libvirt_volume" "alpine_images" {
 # Writable copy-on-write layer for each VM.
 resource "libvirt_volume" "vm_disk" {
 
-  for_each = var.all_vms
+  #for_each = var.all_vms
+  for_each = tomap({
+    for sn_key, sn in local.vms_and_subnets : "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+  })
 
-  name = "${each.value.name}.qcow2"
+
+  name = "${each.key}.qcow2"
 
   pool      = libvirt_pool.basic["vm-images"].name
   #type     = "file"

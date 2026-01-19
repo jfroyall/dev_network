@@ -24,6 +24,8 @@ locals {
         user_data = vm.user_data
         host_name = vm.name
         network   = vm.network
+        image     = vm.image
+        sof_disk  = vm.sof_disk
         branch    = branch
       }
     ]
@@ -60,22 +62,29 @@ resource "libvirt_cloudinit_disk" "alpine_seed" {
         dhcp4: true
   EOF
 }
+
+
 #
 # Upload the cloud-init ISO into the pool.
-#resource "libvirt_volume" "alpine_seed_volume" {
-#
-#  for_each = var.all_vms
-#
-#  name = "alpine-cloudinit-${each.value.name}.iso"
-#  #pool = "default"
-#  pool = libvirt_pool.basic["os-isos"].name
-#
-#  create = {
-#    content = {
-#      url = libvirt_cloudinit_disk.alpine_seed[each.value.name].path
-#    }
-#  }
-#}
+resource "libvirt_volume" "alpine_seed_volume" {
+
+  #for_each = var.all_vms
+
+  for_each = tomap({
+    for sn_key, sn in local.vms_and_subnets : "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+  })
+
+
+  name = "alpine-cloudinit-${each.key}.iso"
+  #pool = "default"
+  pool = libvirt_pool.basic["os-isos"].name
+
+  create = {
+    content = {
+      url = libvirt_cloudinit_disk.alpine_seed["${each.key}"].path
+    }
+  }
+}
 #
 #
 #

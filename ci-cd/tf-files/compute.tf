@@ -3,9 +3,13 @@
 
 resource "libvirt_domain" "alpine" {
 
-  for_each = var.all_vms
+  #for_each = var.all_vms
+  for_each = tomap({
+    for sn_key, sn in local.vms_and_subnets : "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+  })
 
-  name   = each.value.name
+
+  name   = each.value.host_name
   type   = "kvm"
   memory = 2048
   memory_unit = "MiB"
@@ -54,7 +58,7 @@ resource "libvirt_domain" "alpine" {
         source = {
           volume = {
             pool   = "vm-images"
-            volume = libvirt_volume.vm_disk["${each.value.name}"].name
+            volume = libvirt_volume.vm_disk["${each.key}"].name
             #volume = "${each.value.name}.qcow2"
           }
         }
@@ -90,8 +94,8 @@ resource "libvirt_domain" "alpine" {
         device = "cdrom"
         source = {
           volume = {
-            pool   = libvirt_volume.alpine_seed_volume["${each.value.name}"].pool
-            volume = libvirt_volume.alpine_seed_volume["${each.value.name}"].name
+            pool   = libvirt_volume.alpine_seed_volume["${each.key}"].pool
+            volume = libvirt_volume.alpine_seed_volume["${each.key}"].name
           }
         }
         target = {
@@ -109,7 +113,8 @@ resource "libvirt_domain" "alpine" {
         }
         source = {
           network = {
-            network = "outer-network"
+            #network = "outer-network"
+            network = "${each.value.network}"
           }
         }
       }
