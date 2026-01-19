@@ -246,3 +246,16 @@ The bulk of the deployment and configuration will use:
    - Moved the `compute.tf` and `volumes.tf` to the directory `tf-files`.
      This is my way to simplify the construction.
    - Created multiple networks.
+   - Built an instance of `jenkins` controller on the Mac.  The instance is
+     based on a `TKL` appliance.
+
+- 19 Jan 2026
+   - Tried `apt-get update` but it failed because of a missing certificate.
+   - Tried `apt-get upgrade` prior to the update.  The hope is that the
+     upgrade will install the necessary certificate.
+   - The `jenkins` required totally new repository signing keys.  I downloaded
+     them from their site.
+   - Because I did an `apt-get` upgrade of `jenkins` I had to update to
+     `java-21`.   I used the repository from *Adoptium*.
+   - I installed `jenkins` on the desktop.
+   - Adding the DNS domain name to the `cloud-init` ISOs...

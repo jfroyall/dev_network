@@ -17,20 +17,40 @@
 #
 #
 
+locals {
+  vms_and_subnets = flatten([
+    for vm_key, vm in var.all_vms:[
+      for branch in var.all_branches:{
+        user_data = vm.user_data
+        host_name = vm.name
+        network   = vm.network
+        branch    = branch
+      }
+    ]
+  ])
+}
+
 #
 # Cloud-init seed ISO.
 resource "libvirt_cloudinit_disk" "alpine_seed" {
 
-  for_each = var.all_vms
+  for_each = tomap({
+    for sn_key, sn in local.vms_and_subnets : "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+  })
 
   name = "alpine-cloudinit"
 
   #user_data = file("user-data.yaml")
-  user_data = templatefile(each.value.user_data,  { host_name = "${each.value.name}", domain_name=libvirt_network.outer.domain.name})
+  user_data = templatefile(each.value.user_data,  { 
+                            host_name = "${each.value.host_name}", 
+                            network   = "${each.value.network}",
+                            branch    = "${each.value.branch}"
+                            }
+                            )
 
   meta_data = <<-EOF
-    instance-id: ${each.value.name}
-    local-hostname: ${each.value.name}
+    instance-id: ${each.value.host_name}
+    local-hostname: ${each.value.host_name}
   EOF
 
   network_config = <<-EOF
@@ -42,20 +62,20 @@ resource "libvirt_cloudinit_disk" "alpine_seed" {
 }
 #
 # Upload the cloud-init ISO into the pool.
-resource "libvirt_volume" "alpine_seed_volume" {
-
-  for_each = var.all_vms
-
-  name = "alpine-cloudinit-${each.value.name}.iso"
-  #pool = "default"
-  pool = libvirt_pool.basic["os-isos"].name
-
-  create = {
-    content = {
-      url = libvirt_cloudinit_disk.alpine_seed[each.value.name].path
-    }
-  }
-}
+#resource "libvirt_volume" "alpine_seed_volume" {
+#
+#  for_each = var.all_vms
+#
+#  name = "alpine-cloudinit-${each.value.name}.iso"
+#  #pool = "default"
+#  pool = libvirt_pool.basic["os-isos"].name
+#
+#  create = {
+#    content = {
+#      url = libvirt_cloudinit_disk.alpine_seed[each.value.name].path
+#    }
+#  }
+#}
 #
 #
 #

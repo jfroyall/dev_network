@@ -20,6 +20,13 @@ variable "all_pools" {
   description ="The pools required for the build."
 }
 
+variable "all_branches" {
+  type    = set(string)
+  default = ["prod", "test", "dev"]
+  description ="The git branches (correspond to DNS domains)."
+}
+
+
 #The images required.  Note that the index is the name of the VM.
 variable "all_images"{
   type = map(object({
@@ -45,10 +52,6 @@ variable "all_images"{
             nginx = {
               name: "nginx"
               url : "file:///scratch/vm-images/nginx.qcow2"
-            },
-            jenkins = {
-              name: "jenkins"
-              url : "file:///scratch/vm-images/jenkins.qcow2"
             },
             vault = {
               name: "vault"
@@ -88,7 +91,6 @@ variable "all_isos"{
 ##  ------   Important DO NOT add redmine until later!
 ##  ------   Important DO NOT add redmine until later!
 ## ## ## ## ## ## ## ## ## ##
-
 #Be sure to update 'undefine.sh' if you add more VMs
 variable "all_vms"{
   type = map(object({
@@ -108,7 +110,7 @@ variable "all_vms"{
               sof_mem : 1*1024*1024*1024
               sof_disk: 2*1024*1024*1024
               image   : "alpine"
-              network : "outer-network"
+              network : "control"
               user_data : "user-data.yaml.tpl"
             },
             vault = {
@@ -116,7 +118,7 @@ variable "all_vms"{
               sof_mem : 1*1024*1024*1024
               sof_disk: 2*1024*1024*10240
               image   : "alpine"
-              network : "outer-network"
+              network : "control"
               user_data : "vault-user-data.yaml.tpl"
             },
             nginx = {
@@ -124,7 +126,7 @@ variable "all_vms"{
               sof_mem : 1*1024*1024*10240
               sof_disk: 2*1024*1024*10240
               image   : "alpine"
-              network : "outer-network"
+              network : "control"
               user_data : "user-data.yaml.tpl"
             },
             ansible = {
@@ -132,7 +134,7 @@ variable "all_vms"{
               sof_mem : 1*1024*1024*10240
               sof_disk: 2*1024*1024*10240
               image   : "alpine"
-              network : "outer-network"
+              network : "control"
               user_data : "ansible-user-data.yaml.tpl"
             },
             /*
@@ -152,13 +154,6 @@ variable "all_vms"{
               image   : "my-sql"
               network : "inner-network"
             },
-            jenkins = {
-              name    : "jenkins"
-              sof_mem : 4*1024*1024*10240
-              sof_disk: 10*1024*1024*10240
-              image   : "jenkins"
-              network : "inner-network"
-            },
            */
            }
   description ="The set of all VMs which will be created."
@@ -168,7 +163,7 @@ variable "all_vms"{
 variable "all_inner_networks"{
   type = map(object({
                     name   = string
-                    ip     = string
+                    cidr   = string
                     prefix = string
                     start  = string
                     end    = string
@@ -176,29 +171,29 @@ variable "all_inner_networks"{
                   }))
 
   default ={
-            internal_office_home = {
-                                  name   = "internal_office_home"
-                                  ip     = "172.16.18.0"
+            internal_prod = {
+                                  name   = "internal_prod"
+                                  cidr   = "172.16.18.0"
                                   prefix = "24"
                                   start  = "172.16.18.129"
                                   end    = "172.16.18.192"
-                                  domain_name  = "internal.office.home"
+                                  domain_name  = "internal.prod"
                                   }
-            internal_dev_home = {
-                                  name   = "internal_dev_home"
-                                  ip     = "172.17.18.0"
+            internal_test = {
+                                  name   = "internal_test"
+                                  cidr   = "172.17.18.0"
                                   prefix = "24"
                                   start  = "172.17.18.129"
                                   end    = "172.17.18.192"
-                                  domain_name  = "internal.dev.home"
+                                  domain_name  = "internal.test"
                                   }
-            internal_test_home = {
-                                  name   = "internal_test_home"
-                                  ip     = "172.18.18.0"
+            internal_dev = {
+                                  name   = "internal_dev"
+                                  cidr   = "172.18.18.0"
                                   prefix = "24"
                                   start  = "172.18.18.129"
                                   end    = "172.18.18.192"
-                                  domain_name  = "internal.test.home"
+                                  domain_name  = "internal.dev"
                                   }
            }
   description ="The set of all networks which will be created."
@@ -206,7 +201,7 @@ variable "all_inner_networks"{
 variable "all_control_networks"{
   type = map(object({
                     name   = string
-                    ip     = string
+                    cidr   = string
                     prefix = string
                     start  = string
                     end    = string
@@ -214,29 +209,29 @@ variable "all_control_networks"{
                   }))
 
   default ={
-            control_office_home = {
-                                  name   = "control_office_home"
-                                  ip     = "172.16.17.0"
+            control_prod = {
+                                  name   = "control_prod"
+                                  cidr   = "172.16.17.0"
                                   prefix = "24"
                                   start  = "172.16.17.129"
                                   end    = "172.16.17.192"
-                                  domain_name  = "control.office.home"
+                                  domain_name  = "control.prod"
                                   }
-            control_dev_home = {
-                                  name   = "control_dev_home"
-                                  ip     = "172.17.17.0"
+            control_test = {
+                                  name   = "control_test"
+                                  cidr   = "172.17.17.0"
                                   prefix = "24"
                                   start  = "172.17.17.129"
                                   end    = "172.17.17.192"
-                                  domain_name  = "control.dev.home"
+                                  domain_name  = "control.test"
                                   }
-            control_test_home = {
-                                  name   = "control_test_home"
-                                  ip     = "172.18.17.0"
+            control_dev = {
+                                  name   = "control_dev"
+                                  cidr   = "172.18.17.0"
                                   prefix = "24"
                                   start  = "172.18.17.129"
                                   end    = "172.18.17.192"
-                                  domain_name  = "control.test.home"
+                                  domain_name  = "control.dev"
                                   }
            }
   description ="The set of all networks which will be created."

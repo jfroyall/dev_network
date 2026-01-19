@@ -42,54 +42,51 @@ managed manually.
 
 The fact that I plan to use `jenkins` implies that a controller and a number
 of workers must exist.  I will probably automate the construction of these
-VMs, but they will be based on `TurnKey` ISOs.
+VMs, but they will be based on `Alpine` images.
 
 ## The architecture
 - Define DNS zones
-  - home.
-  - office.home.
-  - control.office.home.
-  - internal.office.home.
-  - test.home.
-  - control.test.home.
-  - internal.test.home.
-  - dev.home.
-  - control.dev.home.
-  - internal.dev.home.
 
-|zone|IP|
+|zone|CIDR|
 |---|---|
-|office.home.            |172.16.16.0/20|
-|control.office.home.    |172.16.17.0/24|
-|internal.office.home.   |172.16.18.0/24|
-|test.home.              |172.17.16.0/20|
-|control.test.home.      |172.17.17.0/24|
-|internal.test.home.     |172.17.18.0/24|
-|dev.home.               |172.18.16.0/20|
-|control.dev.home.       |172.18.17.0/24|
-|internal.dev.home.      |172.18.18.0/24|
+|prod.office.home.              |172.16.16.0/20|
+|control.prod.office.home.      |172.16.17.0/24|
+|internal.prod.office.home.     |172.16.18.0/24|
+|test.office.home.              |172.17.16.0/20|
+|control.test.office.home.      |172.17.17.0/24|
+|internal.test.office.home.     |172.17.18.0/24|
+|dev.office.home.               |172.18.16.0/20|
+|control.dev.office.home.       |172.18.17.0/24|
+|internal.dev.office.home.      |172.18.18.0/24|
 
 
 - Define sub-networks
   -  See ![this figure](../figures/QEMU_Networking.png)
 
 - VMs with static IP addresses
-  1. `jumpbox`: 172.x.17.128
-  1. `vault`: 172.x.17.129
-  1. `ns1`: 172.x.18.129
+  |host|IP|
+  |---|---|
+  | `jenkins`| 172.16.16.128|
+  | `ns1`    | 172.16.16.129|
+  | `jumpbox`| 172.x.17.128|
+  | `vault`  | 172.x.17.129|
 
 ## Pass 1
 ### Build the secrets
 The deployment will require cryptographic pairs and signed certificates.
 These will have to constructed and stored in an `ansible-vault`.  
-
+- `SSH` pair for:
+  - admin access to all VMs
+  - foobar
+- Certificates for for:
+  - foobar
 
 ### Build the networks:
 Use `terraform` to build the networks.  I should loop over a collection of
 objects.  These objects should include the following members:
 1. The network name.
 1. The FQDN.
-1. The IP address range. <span style="color:red">(What does this mean?)</span>.
+1. The CIDR address of the network.
 
 ### Build the storage pools and volumes
 - The pools are:

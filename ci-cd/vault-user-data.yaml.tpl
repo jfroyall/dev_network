@@ -2,7 +2,7 @@
 #
 hostname: ${host_name}
 create_hostname_file: true
-fqdn: ${host_name}.${domain_name}
+fqdn: ${host_name}.${network}.${branch}.home
 prefer_fqdn_over_hostname: true
 
 ssh_pwauth: true

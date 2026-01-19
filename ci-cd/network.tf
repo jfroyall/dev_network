@@ -19,7 +19,7 @@ resource "libvirt_network" "control" {
   }
 
   ips = [{
-    address = each.value.ip
+    address = each.value.cidr
     prefix  = each.value.prefix
     #netmask = "255.255.255.0"
 
@@ -170,7 +170,7 @@ resource "libvirt_network" "inner" {
   }
 
   ips = [{
-    address = each.value.ip
+    address = each.value.cidr
     prefix  = each.value.prefix
     #netmask = "255.255.255.0"
 
