@@ -276,5 +276,11 @@ The bulk of the deployment and configuration will use:
 - 20 Jan 2026
    - Refactored the `.tf` files and added a few `.tfvars` files.  
    - Successfully created a jumpbox on 3 sub-nets.
-   - For the next time implement the dependence on the variable `branch`...
+   - For the next time implement the dependence on the variable
+     `branch`...done.
+   - Well on my way to refactoring the `.tf` files.  
+   - For the next time:
+      - Upgrade the `undefine.sh` script.
+      - Some names are {branch}\_{sub-net} while others are {sub-net}\_{branch}.
+      Fix this.
 

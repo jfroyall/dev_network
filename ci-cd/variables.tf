@@ -76,7 +76,7 @@ variable "all_vms"{
   description ="The set of all VMs which will be created."
 }
 
-
+/*
 variable "all_control_networks"{
   type = map(object({
                     name   = string
@@ -102,6 +102,7 @@ variable "all_inner_networks"{
 
   description ="The set of all networks which will be created."
 }
+*/
 
 
 variable "vm_condition_poweron" {
