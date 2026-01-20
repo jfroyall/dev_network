@@ -14,6 +14,7 @@ all_vms ={
             network : "control"
             user_data : "user-data.yaml.tpl"
           },
+/*
           vault = {
             name    : "vault"
             sof_mem : 1*1024*1024*1024
@@ -30,7 +31,6 @@ all_vms ={
             network : "control"
             user_data : "user-data.yaml.tpl"
           },
-/*
           ansible = {
             name    : "ansible"
             sof_mem : 1*1024*1024*10240

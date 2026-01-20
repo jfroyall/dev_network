@@ -2,7 +2,8 @@
 
 export VIRSH_DEFAULT_CONNECT_URI="qemu+ssh://jean@192.168.1.96/system?keyfile=/home/jean/.ssh/id_rsa&no_verify=0&sshauth=privkey"
 
-for d in ansible nginx jumpbox vault; do 
+#for d in ansible nginx jumpbox vault; do 
+for d in jumpbox.dev.control jumpbox.prod.control jumpbox.test.control   ; do 
 echo $d; 
   virsh  undefine $d
   #virsh  shutdown $d  && virsh  undefine $d

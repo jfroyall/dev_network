@@ -1,4 +1,28 @@
 
+# The collection of objects required to construct the VMs/domains
+locals {
+  all_vm_descriptors =  tomap({
+  for sn_key, sn in 
+  flatten([
+    for vm in var.all_vms:[
+      for branch in var.all_branches:[
+                          {
+                          user_data = vm.user_data
+                          host_name = vm.name
+                          network   = vm.network
+                          branch    = branch
+                          sub_net   = "${vm.network}_${branch}"
+
+                          #image     = vm.image
+                          #sof_disk  = vm.sof_disk
+
+                          }
+      ]
+    ]
+    ]): "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+    })
+}
+
 # The collection of objects required to construct  cloud-init ISOs
 locals {
   all_cloud_init_isos =  tomap({
@@ -11,15 +35,11 @@ locals {
                           host_name = vm.name
                           network   = vm.network
                           branch    = branch
-
-                          #image     = vm.image
-                          #sof_disk  = vm.sof_disk
-
                           }
       ]
     ]
-    ]): "${sn.host_name}.${sn.branch}.${sn.network}" => sn
-    })
+  ]): "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+  })
 }
 
 # The collection of objects required to construct  seed_volumes

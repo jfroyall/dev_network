@@ -272,3 +272,9 @@ The bulk of the deployment and configuration will use:
     `all_vms`, `all_images` and `all_inner_networks` variables must be
     reconsidered in the light of their usage by the various `terraform`
     resources.
+
+- 20 Jan 2026
+   - Refactored the `.tf` files and added a few `.tfvars` files.  
+   - Successfully created a jumpbox on 3 sub-nets.
+   -For the next time implement the dependence on the variable `branch`...
+
