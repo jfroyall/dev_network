@@ -25,3 +25,13 @@ output "instance_ips" {
 #output "lb_address" {
 #  value = aws_alb.web.public_dns
 #}
+
+output "vms_and_subnets" {
+  value = local.vms_and_subnets
+}
+output "vms_desc" {
+  value = local.vms_desc
+}
+output "network_descriptors" {
+  value = local.network_descriptors
+}

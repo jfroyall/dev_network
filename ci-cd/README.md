@@ -29,6 +29,14 @@ The bulk of the deployment and configuration will use:
 -  How to handle sensitive data?
 -  Why does `terraform` fail to `undefine` the VMs?
 
+## Notes
+- There are several different ways to assign a value to an input variable
+  (defined in a `.tf` file:
+   - Include -var options on the terraform plan or terraform apply command line.
+   - Include -var-file options to select one or more `.tfvars` files to set values for many variables at once.
+   - Create a `terraform.tfvars` file, or files named `.auto.tfvars`, which are treated the same as -var-file arguments but are loaded automatically.
+   - For a child module, include an expression to assign to the variable inside the calling module block.
+
 ## TO DO
   - Add a real vault
 
@@ -258,4 +266,9 @@ The bulk of the deployment and configuration will use:
    - Because I did an `apt-get` upgrade of `jenkins` I had to update to
      `java-21`.   I used the repository from *Adoptium*.
    - I installed `jenkins` on the desktop.
-   - Adding the DNS domain name to the `cloud-init` ISOs...
+   - Adding the DNS domain name to the `cloud-init` ISOs...done.
+   - I tried to add the `libvirt` domains, but ran into another problem.
+   The issue is in the structure of the driving variables.  For example the
+    `all_vms`, `all_images` and `all_inner_networks` variables must be
+    reconsidered in the light of their usage by the various `terraform`
+    resources.

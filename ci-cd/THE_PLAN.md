@@ -71,6 +71,88 @@ VMs, but they will be based on `Alpine` images.
   | `jumpbox`| 172.x.17.128|
   | `vault`  | 172.x.17.129|
 
+## Structure of the `terraform` files
+If one is not careful, the `terraform` code can become difficult to manage.
+In fact the objective is to build a number of interdependent `libvirt`
+resources.  The properties of these resources must be provided _a priori_.
+They will be defined by a collection of `terraform` variables.  The problem is
+that these variables can be used to construct various resources.
+
+The ideal would be to construct a hierarchy of variables.  The basic variables
+could be combined to define new variables which would be used to create the
+resources.  This would place the burden in the construction of collections
+each of which corresponds to a type of resource.  Each member of the
+collection could be used to define an instance of the corresponding resource.
+
+It seems natural to start with the object which must be provided to each type
+of resource.  When if the intersection of the objects which correspond to
+two resources is non-empty, then that intersection should be used to define
+one or more basic variables.
+
+These are the `terraform` resource types which I plan to build.  Each resource
+is accompanied by the parameters it requires
+- networks
+   - Its name/label
+   - DNS resolver info
+   - The IP information (one per IP address)
+      - The CIDR
+      - The prefix or netmask
+      - Ranges
+      - DHCP information
+   - The network's DNS domain information
+   - The network's forwarding information
+- pools
+   - Its name/label
+   - Its type (always 'dir' )
+   - The location of the directory.
+- backing store volumes
+   - Its name/label
+   - The pool where it is to be stored
+   - The URL of the image resource
+- copy on write volumes
+   - Its name/label
+   - The pool where it is to be stored
+   - Its capacity
+   - Its type (qcow2?)
+   - Its corresponding backing store
+      - path to the backing store
+      - format of the backing store
+
+- `cloudinit_disk`
+   - Its name/label
+   - The rest is <span style="color:red">**TBD**</span>.
+
+- `cloud-init` ISOs
+   - Its name/label
+   - The pool where it is to be stored
+   - The URL of the output
+
+- domains
+   - Its name/label
+   - Memory requirements
+   - Number of CPUs
+   - OS description
+   - disks
+     - the pool containing the disk image
+     - the volume which corresponds to the disk image
+     - the type of driver
+   - interfaces
+     - the type of interface
+     - the model
+     - the source for the interface
+       - one of the previously created networks
+   - etc...
+
+We could create a collection of domain descriptors which define all of the
+values required to instantiate a domain.  These descriptors should be built
+from more basic objects.  Similarly for copy on write volumes.
+
+Since I plan to duplicate the architecture over a number of networks and
+subnets, and since each subnet corresponds to a DNS domain I the natural key
+is the FQDN of each host.  That is I must create a collection of descriptors
+indexed by the FQDN of the VMs.
+
+
 ## Pass 1
 ### Build the secrets
 The deployment will require cryptographic pairs and signed certificates.

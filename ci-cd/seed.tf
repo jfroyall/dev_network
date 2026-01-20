@@ -17,20 +17,6 @@
 #
 #
 
-locals {
-  vms_and_subnets = flatten([
-    for vm_key, vm in var.all_vms:[
-      for branch in var.all_branches:{
-        user_data = vm.user_data
-        host_name = vm.name
-        network   = vm.network
-        image     = vm.image
-        sof_disk  = vm.sof_disk
-        branch    = branch
-      }
-    ]
-  ])
-}
 
 #
 # Cloud-init seed ISO.

@@ -8,7 +8,6 @@ variable "scratch_dir" {
 
 variable "all_user_data" {
   type = map(string)
-
   default ={
     standard = "user-data.yaml.tpl",
     ansible  = "ansible-user-data.yaml.tpl"
@@ -33,40 +32,6 @@ variable "all_images"{
                     name = string
                     url  = string
                   }))
-  default ={
-            alpine = {
-              name = "alpine-3.23"
-              url = "https://dl-cdn.alpinelinux.org/v3.23/releases/cloud/nocloud_alpine-3.23.0-x86_64-bios-cloudinit-r0.qcow2"
-              #url = "https://dl-cdn.alpinelinux.org/v3.23/releases/cloud/generic_alpine-3.23.0-x86_64-bios-cloudinit-r0.qcow2"
-              #url = "https://dl-cdn.alpinelinux.org/v3.23/releases/cloud/generic_alpine-3.23.0-x86_64-uefi-cloudinit-r0.qcow2"
-            },
-            /*
-            vault = {
-              name: "core-turnkey"
-              url : "file:///scratch/vault.qcow2"
-            },
-            jumpbox = {
-              name: "jumpbox"
-              url : "file:///scratch/vm-images/nginx.qcow2"
-            },
-            nginx = {
-              name: "nginx"
-              url : "file:///scratch/vm-images/nginx.qcow2"
-            },
-            vault = {
-              name: "vault"
-              url : "file:///scratch/vm-images/vault.qcow2"
-            },
-            my-sql = {
-              name: "my-sql"
-              url : "file:///scratch/vm-images/my-sql.qcow2"
-            },
-            #core = {
-            #  name: "core-turnkey"
-            #  url : "file:///scratch/vm-images/jenkins.qcow2"
-            #},
-            */
-           }
   description ="The images required for the build."
 }
 
@@ -87,11 +52,6 @@ variable "all_isos"{
 
 
 
-## ## ## ## ## ## ## ## ## ##
-##  ------   Important DO NOT add redmine until later!
-##  ------   Important DO NOT add redmine until later!
-## ## ## ## ## ## ## ## ## ##
-#Be sure to update 'undefine.sh' if you add more VMs
 variable "all_vms"{
   type = map(object({
                     name     = string
@@ -102,63 +62,22 @@ variable "all_vms"{
                     user_data  = string
                   }))
 
-  default ={
-            /*
-            */
-            jumpbox = {
-              name    : "jumpbox"
-              sof_mem : 1*1024*1024*1024
-              sof_disk: 2*1024*1024*1024
-              image   : "alpine"
-              network : "control"
-              user_data : "user-data.yaml.tpl"
-            },
-            vault = {
-              name    : "vault"
-              sof_mem : 1*1024*1024*1024
-              sof_disk: 2*1024*1024*10240
-              image   : "alpine"
-              network : "control"
-              user_data : "vault-user-data.yaml.tpl"
-            },
-            nginx = {
-              name    : "nginx"
-              sof_mem : 1*1024*1024*10240
-              sof_disk: 2*1024*1024*10240
-              image   : "alpine"
-              network : "control"
-              user_data : "user-data.yaml.tpl"
-            },
-            ansible = {
-              name    : "ansible"
-              sof_mem : 1*1024*1024*10240
-              sof_disk: 2*1024*1024*10240
-              image   : "alpine"
-              network : "control"
-              user_data : "ansible-user-data.yaml.tpl"
-            },
-            /*
-            */
-            /*
-            ns1 = {
-              name    : "ns1"
-              sof_mem : 4*1024*1024*10240
-              sof_disk: 10*1024*1024*10240
-              image   : "core"
-              network : "outer-network"
-            },
-            my-sql = {
-              name    : "my-sql"
-              sof_mem : 4*1024*1024*10240
-              sof_disk: 20*1024*1024*10240
-              image   : "my-sql"
-              network : "inner-network"
-            },
-           */
-           }
   description ="The set of all VMs which will be created."
 }
 
+
+variable "all_control_networks"{
+  type = map(object({
+                    name   = string
+                    cidr   = string
+                    prefix = string
+                    start  = string
+                    end    = string
+                    domain_name  = string
+                  }))
+
+  description ="The set of all networks which will be created."
+}
 
 variable "all_inner_networks"{
   type = map(object({
@@ -170,72 +89,9 @@ variable "all_inner_networks"{
                     domain_name  = string
                   }))
 
-  default ={
-            internal_prod = {
-                                  name   = "internal_prod"
-                                  cidr   = "172.16.18.0"
-                                  prefix = "24"
-                                  start  = "172.16.18.129"
-                                  end    = "172.16.18.192"
-                                  domain_name  = "internal.prod"
-                                  }
-            internal_test = {
-                                  name   = "internal_test"
-                                  cidr   = "172.17.18.0"
-                                  prefix = "24"
-                                  start  = "172.17.18.129"
-                                  end    = "172.17.18.192"
-                                  domain_name  = "internal.test"
-                                  }
-            internal_dev = {
-                                  name   = "internal_dev"
-                                  cidr   = "172.18.18.0"
-                                  prefix = "24"
-                                  start  = "172.18.18.129"
-                                  end    = "172.18.18.192"
-                                  domain_name  = "internal.dev"
-                                  }
-           }
   description ="The set of all networks which will be created."
 }
-variable "all_control_networks"{
-  type = map(object({
-                    name   = string
-                    cidr   = string
-                    prefix = string
-                    start  = string
-                    end    = string
-                    domain_name  = string
-                  }))
 
-  default ={
-            control_prod = {
-                                  name   = "control_prod"
-                                  cidr   = "172.16.17.0"
-                                  prefix = "24"
-                                  start  = "172.16.17.129"
-                                  end    = "172.16.17.192"
-                                  domain_name  = "control.prod"
-                                  }
-            control_test = {
-                                  name   = "control_test"
-                                  cidr   = "172.17.17.0"
-                                  prefix = "24"
-                                  start  = "172.17.17.129"
-                                  end    = "172.17.17.192"
-                                  domain_name  = "control.test"
-                                  }
-            control_dev = {
-                                  name   = "control_dev"
-                                  cidr   = "172.18.17.0"
-                                  prefix = "24"
-                                  start  = "172.18.17.129"
-                                  end    = "172.18.17.192"
-                                  domain_name  = "control.dev"
-                                  }
-           }
-  description ="The set of all networks which will be created."
-}
 
 variable "vm_condition_poweron" {
   description = "Set to true if the instances are defined"
