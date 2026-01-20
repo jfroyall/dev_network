@@ -32,20 +32,13 @@ resource "libvirt_volume" "alpine_images" {
 # Writable copy-on-write layer for each VM/(libvirt domain).
 resource "libvirt_volume" "vm_disk" {
 
-  #for_each = var.all_vms
   for_each = local.all_cow_disks
-#  for_each = tomap({
-#    for sn_key, sn in local.vms_and_subnets : "${sn.host_name}.${sn.branch}.${sn.network}" => sn
-#  })
-
 
   name = "${each.key}.qcow2"
 
   pool      = libvirt_pool.basic["vm-images"].name
   #type     = "file"
   capacity  = "${each.value.sof_disk}"
-  #capacity = 2147483648
-  #capacity  = 10
   #capacity_unit = "GiB"
   target = {
     format = {
@@ -60,20 +53,10 @@ resource "libvirt_volume" "vm_disk" {
       #type = contains(keys(libvirt_volume.ISOs), "${each.value.image}") ?  "raw":"qcow2"
     }
   }
-  /*
-  backing_store = {
-    path = contains(keys(libvirt_volume.ISOs), "${each.value.image}") ?  libvirt_volume.ISOs["${each.value.image}"].path: libvirt_volume.alpine_images["${each.value.image}"].path
-    format = {
-      #type = "qcow2"
-      #type = "raw"
-      type = contains(keys(libvirt_volume.ISOs), "${each.value.image}") ?  "raw":"qcow2"
-    }
-  }
-  */
 }
 
 
-## Volumes of Turkey ISOs
+## Volumes of Turnkey ISOs
 #resource "libvirt_volume" "ISOs" {
 #  
 #  for_each = var.all_isos
@@ -90,22 +73,6 @@ resource "libvirt_volume" "vm_disk" {
 #    content = {
 #      url = "${each.value.url}"
 #    }
-#  }
-#}
-
-
-
-
-## Basic pool
-#resource "libvirt_pool" "default" {
-#  name = "scratch-pool"
-#  type = "dir"
-#  # source = {
-#  #    host = "localhost" 
-#  #   dir = "/scratch/scratch-pool" 
-#  # }
-#  target = {
-#    path = "/scratch/scratch-pool"
 #  }
 #}
 
