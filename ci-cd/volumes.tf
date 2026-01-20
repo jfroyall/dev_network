@@ -1,5 +1,5 @@
 
-## Volume from HTTP URL upload
+# Volume from HTTP URL upload
 #resource "libvirt_volume" "alpine_base" {
 #  name = format("%s.qcow2", var.all_images["alpine"].name)
 #  pool = libvirt_pool.basic["vm-templates"].name
@@ -33,9 +33,10 @@ resource "libvirt_volume" "alpine_images" {
 resource "libvirt_volume" "vm_disk" {
 
   #for_each = var.all_vms
-  for_each = tomap({
-    for sn_key, sn in local.vms_and_subnets : "${sn.host_name}.${sn.branch}.${sn.network}" => sn
-  })
+  for_each = local.all_cow_disks
+#  for_each = tomap({
+#    for sn_key, sn in local.vms_and_subnets : "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+#  })
 
 
   name = "${each.key}.qcow2"
