@@ -276,5 +276,5 @@ The bulk of the deployment and configuration will use:
 - 20 Jan 2026
    - Refactored the `.tf` files and added a few `.tfvars` files.  
    - Successfully created a jumpbox on 3 sub-nets.
-   -For the next time implement the dependence on the variable `branch`...
+   - For the next time implement the dependence on the variable `branch`...
 

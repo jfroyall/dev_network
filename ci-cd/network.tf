@@ -1,7 +1,6 @@
 # The control sub-networks
 resource "libvirt_network" "sub_networks" {
 
-  #for_each = var.all_control_networks
   for_each = local.network_descriptors
 
   name      = each.value.name

@@ -8,6 +8,7 @@ all_control_networks ={
                                 end    = "172.16.17.192"
                                 domain_name  = "control.prod"
                                 }
+/*
           control_test = {
                                 name   = "control_test"
                                 cidr   = "172.17.17.0"
@@ -24,7 +25,6 @@ all_control_networks ={
                                 end    = "172.18.17.192"
                                 domain_name  = "control.dev"
                                 }
-/*
 */
 }
 

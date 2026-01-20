@@ -35,3 +35,6 @@ output "vms_desc" {
 output "network_descriptors" {
   value = local.network_descriptors
 }
+output "t_control_network_str" {
+  value = local.t_control_networks
+}

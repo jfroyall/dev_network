@@ -25,6 +25,17 @@ variable "all_branches" {
   description ="The git branches (correspond to DNS domains)."
 }
 
+#maps a branch to an IP octet
+variable "ip_octet"{
+  type = map(number)
+  default ={
+            prod : 16
+            test : 17
+            dev  : 18
+           }
+  description ="Maps a branch to an IP octet."
+}
+
 
 #The images required.  Note that the index is the name of the VM.
 variable "all_images"{
