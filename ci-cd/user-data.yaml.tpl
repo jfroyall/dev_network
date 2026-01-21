@@ -6,7 +6,7 @@ hostname: ${host_name}
 create_hostname_file: true
 
 
-fqdn: ${host_name}.${network}.${branch}.home
+fqdn: ${host_name}.${network}.${branch}.office.home
 
 
 prefer_fqdn_over_hostname: true

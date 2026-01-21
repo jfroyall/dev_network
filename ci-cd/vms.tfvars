@@ -23,14 +23,6 @@ all_vms ={
             user_data : "vault-user-data.yaml.tpl"
           },
 /*
-          nginx = {
-            name    : "nginx"
-            sof_mem : 1*1024*1024*10240
-            sof_disk: 2*1024*1024*10240
-            image   : "alpine"
-            network : "control"
-            user_data : "user-data.yaml.tpl"
-          },
           ansible = {
             name    : "ansible"
             sof_mem : 1*1024*1024*10240
@@ -38,6 +30,14 @@ all_vms ={
             image   : "alpine"
             network : "control"
             user_data : "ansible-user-data.yaml.tpl"
+          },
+          nginx = {
+            name    : "nginx"
+            sof_mem : 1*1024*1024*10240
+            sof_disk: 2*1024*1024*10240
+            image   : "alpine"
+            network : "control"
+            user_data : "user-data.yaml.tpl"
           },
 */
 }

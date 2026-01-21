@@ -4,9 +4,6 @@
 resource "libvirt_domain" "alpine" {
 
   for_each = local.all_vm_descriptors
-#  for_each = tomap({
-#    for sn_key, sn in local.vms_and_subnets : "${sn.host_name}.${sn.branch}.${sn.network}" => sn
-#  })
 
 
   name   = each.key
@@ -113,7 +110,6 @@ resource "libvirt_domain" "alpine" {
         }
         source = {
           network = {
-            #network = "outer-network"
             network = "${each.value.sub_net}"
           }
         }

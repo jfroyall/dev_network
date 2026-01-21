@@ -76,34 +76,6 @@ variable "all_vms"{
   description ="The set of all VMs which will be created."
 }
 
-/*
-variable "all_control_networks"{
-  type = map(object({
-                    name   = string
-                    cidr   = string
-                    prefix = string
-                    start  = string
-                    end    = string
-                    domain_name  = string
-                  }))
-
-  description ="The set of all networks which will be created."
-}
-
-variable "all_inner_networks"{
-  type = map(object({
-                    name   = string
-                    cidr   = string
-                    prefix = string
-                    start  = string
-                    end    = string
-                    domain_name  = string
-                  }))
-
-  description ="The set of all networks which will be created."
-}
-*/
-
 
 variable "vm_condition_poweron" {
   description = "Set to true if the instances are defined"
@@ -130,15 +102,3 @@ variable "web_instance_count" {
   }
 }
 
-#variable "db_disk_size" {
-# type        = number
-# description = "Disk size for the API database"
-# default     = 100
-#}
-#
-#variable "db_password" {
-# type        = string
-# description = "Database password"
-# sensitive   = true
-#}
-#

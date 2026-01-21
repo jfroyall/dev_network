@@ -95,7 +95,7 @@ locals {
                                                   "${var.ip_octet[b]}")
                                 end    = format("172.%s.17.192",
                                                   "${var.ip_octet[b]}")
-                                domain_name  = "control.${b}"
+                                domain_name  = "control.${b}.office.home"
                                 }
   }
 
@@ -110,7 +110,7 @@ locals {
                                                   "${var.ip_octet[b]}")
                                 end    = format("172.%s.18.192",
                                                   "${var.ip_octet[b]}")
-                                domain_name  = "internal.${b}"
+                                domain_name  = "internal.${b}.office.home"
                                 }
   }
 

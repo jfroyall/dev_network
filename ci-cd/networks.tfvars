@@ -1,4 +1,5 @@
 
+/*
 all_control_networks ={
           control_prod = {
                                 name   = "control_prod"
@@ -8,7 +9,6 @@ all_control_networks ={
                                 end    = "172.16.17.192"
                                 domain_name  = "control.prod"
                                 }
-/*
           control_test = {
                                 name   = "control_test"
                                 cidr   = "172.17.17.0"
@@ -25,7 +25,6 @@ all_control_networks ={
                                 end    = "172.18.17.192"
                                 domain_name  = "control.dev"
                                 }
-*/
 }
 
 all_inner_networks ={
@@ -37,7 +36,6 @@ all_inner_networks ={
                                 end    = "172.16.18.192"
                                 domain_name  = "internal.prod"
                                 }
-/*
           internal_test = {
                                 name   = "internal_test"
                                 cidr   = "172.17.18.0"
@@ -54,5 +52,5 @@ all_inner_networks ={
                                 end    = "172.18.18.192"
                                 domain_name  = "internal.dev"
                                 }
-*/
 }
+*/

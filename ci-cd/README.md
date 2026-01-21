@@ -287,4 +287,6 @@ The bulk of the deployment and configuration will use:
 
 - 21 Jan 2026
    - Upgraded the script and fixed the names.
+   - Creating a `jenkins` `Docker` agent based on the notes found
+      [here](https://www.jenkins.io/blog/2022/12/27/run-jenkins-agent-as-a-service/).
 

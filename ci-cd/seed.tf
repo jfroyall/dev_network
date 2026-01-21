@@ -4,10 +4,6 @@
 resource "libvirt_cloudinit_disk" "alpine_seed" {
 
   for_each = local.all_cloud_init_isos
-#  for_each = tomap({
-#    for sn_key, sn in local.vms_and_subnets : "${sn.host_name}.${sn.branch}.${sn.network}" => sn
-#  })
-
   name = "alpine-cloudinit"
 
   #user_data = file("user-data.yaml")
@@ -37,10 +33,6 @@ resource "libvirt_cloudinit_disk" "alpine_seed" {
 resource "libvirt_volume" "alpine_seed_volume" {
 
   for_each = local.all_seed_volumes
-  #for_each = tomap({
-  #  for sn_key, sn in local.vms_and_subnets : "${sn.host_name}.${sn.branch}.${sn.network}" => sn
-  #})
-
 
   name = "alpine-cloudinit-${each.key}.iso"
   pool = libvirt_pool.basic["os-isos"].name

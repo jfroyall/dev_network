@@ -10,6 +10,11 @@ The second and subsequent passes should deploy and configure additional VMs.
 
 There are a number of major stages:
 1. Establish an architecture/topology.
+1. Build necessary tools:
+   - The `jenkins` controller
+   - The `jenkins` agents.  The agents must have a route to the `libvirt`
+     host and to the `ansible` VM.
+   - An `ansible` VM.  This VM must have a route to the VMs.
 1. Build the networks
 1. Build the storage pools and volumes
 1. Deploy and configure the first VMs.  These are the VMs which are essential
@@ -19,19 +24,18 @@ necessary to complete a useful environment.
 The required packages:
 - `libvirt`
 - `terraform`
-- `ansible`
 - `alpine` cloud images
 - `jenkins` (for testing)
 
 ## Testing
 There will always be three deployments.  These are the 'production'
-deployments, the 'testing' deployment, and the 'development' deployment.
+deployment, the 'testing' deployment, and the 'development' deployment.
 These deployments will correspond to similarly named git branches.  I will
 work and carry out simple tests on the `dev`' branch.  Once I'm satisfied with
 this revision, I will `git merge` the `dev` branch onto the `test` branch.
 A deployment based on the `test` branch will be fully tested.  Once it passes
 all tests, then the `test` branch will be merged with the production (i.e.,
-'master') branch.
+'master') branch.  A revision is tagged once it passes its tests.
 
 I will use `jenkins` to carry out the testing.  The `jenkins` controller will
 monitor the `GitHub` repository.  When a change occurs, the appropriate
@@ -43,6 +47,8 @@ managed manually.
 The fact that I plan to use `jenkins` implies that a controller and a number
 of workers must exist.  I will probably automate the construction of these
 VMs, but they will be based on `Alpine` images.
+
+### Tests for the subsequent deployments
 
 ## The architecture
 - Define DNS zones
@@ -85,10 +91,11 @@ each of which corresponds to a type of resource.  Each member of the
 collection could be used to define an instance of the corresponding resource.
 
 It seems natural to start with the object which must be provided to each type
-of resource.  When if the intersection of the objects which correspond to
+of resource.  If the intersection of the objects which correspond to
 two resources is non-empty, then that intersection should be used to define
 one or more basic variables.
 
+### An example file structure
 These are the `terraform` resource types which I plan to build.  Each resource
 is accompanied by the parameters it requires
 - networks
@@ -179,16 +186,24 @@ objects.  These objects should include the following members:
 Note that the names are subject to change.
 - The volumes are <span style="color:red">**TBD**</span>.
 ### Deploy the initial VMs
+These are the initial VMs:
 - `jumpbox`; the jump-box.
 - `vault`; the HashiCorp vault.
 
-- `ns1`; the DNS server.
+Their complete construction will proceed in a number of steps.  At each step
+we will test and tag.
+1. Create the VMs and check communication.
+   - Test:  From the `ansible` VM `ansible ping` `jumpbox` and `vault`.
+1. Use `ansible`to populate `vault` with secrets from the `ansible-vault`.
+   - Test:  All previous tests.
+   - Test:  TBD
+
 ### Configure the initial VMs
-- `jumpbox`; the jump-box.
+- `jumpbox`; 
 - `vault`; the HashiCorp vault.
    - Update the `vault` from the `ansible-vault`.
-- `ns1`; the DNS server.
-   - Update the `named.conf` file
+- `ansible`; 
+   - Configure the play-book and other files.
 
 ## Subsequent passes
 ### Update the secrets
@@ -196,8 +211,11 @@ Add to the `ansible-vault` secret data base.  Subsequently add to the `vault`,
 using the `ansible` updates.
 ### Deploy the extra VMs
 The extra VMs include:
+- `ns1`; the DNS server.
 - `redmine`
 - `baracuda`
 - `nginx`
 - `cuda`
 ### Configure the extra VMs
+- `ns1`; the DNS server.
+   - Update the `named.conf` file
