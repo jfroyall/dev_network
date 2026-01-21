@@ -281,6 +281,10 @@ The bulk of the deployment and configuration will use:
    - Well on my way to refactoring the `.tf` files.  
    - For the next time:
       - Upgrade the `undefine.sh` script.
-      - Some names are {branch}\_{sub-net} while others are {sub-net}\_{branch}.
+      - Some names are {branch}\_{sub-net} while others are
+        {sub-net}\_{branch}.  The latter is the correct format.
       Fix this.
+
+- 21 Jan 2026
+   - Upgraded the script and fixed the names.
 

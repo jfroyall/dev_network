@@ -12,14 +12,10 @@ locals {
                           network   = vm.network
                           branch    = branch
                           sub_net   = "${vm.network}_${branch}"
-
-                          #image     = vm.image
-                          #sof_disk  = vm.sof_disk
-
                           }
       ]
     ]
-    ]): "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+    ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
     })
 }
 
@@ -38,7 +34,7 @@ locals {
                           }
       ]
     ]
-  ]): "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+  ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
   })
 }
 
@@ -60,7 +56,7 @@ locals {
                           }
       ]
     ]
-    ]): "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+    ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
     })
 }
 
@@ -83,7 +79,7 @@ locals {
                           }
       ]
     ]
-    ]): "${sn.host_name}.${sn.branch}.${sn.network}" => sn
+    ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
     })
 }
 
@@ -92,12 +88,6 @@ locals {
         for b in var.all_branches : 
             "control_${b}" => {
                                 name   = "control_${b}"
-                                #cidr   = "172.16.17.0"
-                                #cidr   = "172.${var.ip_octet[${b}]}.17.0"
-                                #cidr   = format("172.%d.17.0", "${var.ip_octet[${b}]}")
-                                #cidr   = format("172.%d.17.0", var.ip_octet["prod"])
-                                #cidr   = format("172.%s.17.0",
-                                #                  "${var.ip_octet["prod"]}")
                                 cidr   = format("172.%s.17.0",
                                                   "${var.ip_octet[b]}")
                                 prefix = "24"
@@ -113,12 +103,6 @@ locals {
         for b in var.all_branches : 
             "internal_${b}" => {
                                 name   = "internal_${b}"
-                                #cidr   = "172.16.17.0"
-                                #cidr   = "172.${var.ip_octet[${b}]}.18.0"
-                                #cidr   = format("172.%d.18.0", "${var.ip_octet[${b}]}")
-                                #cidr   = format("172.%d.18.0", var.ip_octet["prod"])
-                                #cidr   = format("172.%s.18.0",
-                                #                  "${var.ip_octet["prod"]}")
                                 cidr   = format("172.%s.18.0",
                                                   "${var.ip_octet[b]}")
                                 prefix = "24"
@@ -137,20 +121,20 @@ locals {
   network_descriptors = merge(local.t_control_networks, local.t_internal_networks) 
 }
 
-locals {
-  vms_and_subnets = flatten([
-    for vm_key, vm in var.all_vms:[
-      for branch in var.all_branches:{
-        user_data = vm.user_data
-        host_name = vm.name
-        network   = vm.network
-        image     = vm.image
-        sof_disk  = vm.sof_disk
-        branch    = branch
-      }
-    ]
-  ])
-}
+#locals {
+#  vms_and_subnets = flatten([
+#    for vm_key, vm in var.all_vms:[
+#      for branch in var.all_branches:{
+#        user_data = vm.user_data
+#        host_name = vm.name
+#        network   = vm.network
+#        image     = vm.image
+#        sof_disk  = vm.sof_disk
+#        branch    = branch
+#      }
+#    ]
+#  ])
+#}
 
 # The collection of objects required to construct a VM
 locals {
