@@ -173,8 +173,8 @@ state.  In particular we remove the 'domain' resources from the state.  The
 idea is to back-up these resources prior to their destruction---via the
 `virsh` CLI.
 
-* The pool of saved images is created by `virsh`.  Its control is never
-automated.
+* The pool of saved images is created by `terraform`, but it is immediately
+removed from the state.  Its control is never automated.
 
 * The initial stage builds all of the core resources.  The second stage builds the
 remainder of the resources.  These are primarily VMs/domains.
@@ -199,7 +199,9 @@ A possible solution is as follows:
 1.  Build the required volumes
     * Build the volumes for cloud-image ISOs.  
     * Build the volumes from OS ISOs. 
-1. Build the TKL VMs
+1. Build the TKL VMs  
+Note that currently the only TKL VMs built during the first stage are
+`ansible` and the `jenkins` controller.
    1. Build and configure the `ansible` host.
       * Note that this host must be configured by hand.
       * The public SSH key must be extracted for later use.
