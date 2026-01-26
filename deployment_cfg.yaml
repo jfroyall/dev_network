@@ -28,18 +28,19 @@ pools:
     location: office_backup
     description: Storage for the backup of images
 
-ansible:
-  hostname: ansible
+core_vms:
+  - ansible:
+    hostname: ansible
 
-vault:
-  hostname: vault
+  - vault:
+    hostname: vault
 
-jenkins:
-  hostname: jenkins
+  - jenkins:
+    hostname: jenkins
 
-jenkins_agent:
-  - name: agent_1
-  - name: agent_2
+  - jenkins_agent:
+    - name: agent_1
+    - name: agent_2
 #  
 #- path: /instance_groups/name=jumpbox/jobs/-
 #  type: replace
