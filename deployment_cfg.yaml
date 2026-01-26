@@ -28,6 +28,13 @@ pools:
     location: office_backup
     description: Storage for the backup of images
 
+backup_pool:
+  name: office-backup
+
+precious_domains:
+  - ansible
+  - foobar
+
 core_vms:
   - ansible:
     hostname: ansible

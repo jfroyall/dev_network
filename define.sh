@@ -3,14 +3,32 @@
 . ./utils.sh
 
 function usage {
-  print_error  usage: $0 '{mac|papa}'
+  cat <<EOF
+  more info here
+EOF
+  print_info  usage: $0 '{mac|papa}'
 }
 
 
+while getopts "h" c
+do
+	case "$c"
+	in
+		h) usage; exit 0 ;;
+		#h) inBaseName=$OPTARG ;;
+		\?) echo $USAGE; exit 2;;
+	esac
+done
+shift `expr $OPTIND - 1`
+
 if [ $# -ne 1 ];then
+  print_error "Insufficient number of arguments"
   usage;
   exit 1;
 fi
+
+print_info "host: $1"
+
 
 cat /dev/null > terraform.tfvars
 

@@ -12,10 +12,12 @@ if [ $# -ne 1 ];then
   exit 1;
 fi
 
+print_error "This script needs to be updated."
+early_exit
 
 ./stop.sh $1
 
-./start.sh $1
+./define.sh $1
 
 exit 0
 

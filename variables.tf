@@ -14,6 +14,18 @@
 #  description ="The scratch directory."
 #}
 
+#variable "scratch_dir" {
+#  type = string
+#  #default = "/Users/jean/Scratch"
+#  #default = "/scratch"
+#}
+
+variable "all_pools" {
+  type    = set(string)
+  default = ["os-isos", "vm-templates", "vm-images", "office-backup"]
+  description ="The pools required for the build."
+}
+
 variable "platform_ip" {
   type = string
   description ="The IP address of the platform."
