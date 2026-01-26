@@ -157,18 +157,32 @@ from the state diagram. We cannot save or restore from the 'Running' state.  We
 must be in either the 'Paused' state or the 'Defined' state.
 
 
-1.  ***Restore a deployment***
+1.  ***Restore a deployment*** The user wishes to restore the resources saved
+earlier.  Typically, the user wishes to run the deployment VMs with data
+stored from an earlier run. We must be in an 'Undefined' state.
 
 1.  ***Pause a deployment***
 
 ## Detailed steps for 'Define a deployment'
-The first stage builds all of the core resources.  The second stage builds the
+
+These are the key points regarding the deployment definition:
+
+* We use `terraform` to build all of the resources, but then we use the
+`terraform state rm` command to remove certain resources from the `terraform`
+state.  In particular we remove the 'domain' resources from the state.  The
+idea is to back-up these resources prior to their destruction---via the
+`virsh` CLI.
+
+* The pool of saved images is created by `virsh`.  Its control is never
+automated.
+
+* The initial stage builds all of the core resources.  The second stage builds the
 remainder of the resources.  These are primarily VMs/domains.
 
 ### Initial stage
 
 1. Build the network.
-I am currently building the network with `terraform`.  This is problematic, since 
+I am currently building the network with `terraform`.  This could be problematic, since 
 this means that the network is destroyed with a `terraform destroy`.  
 A possible solution is as follows:
    1.  Create the network with a script which run `virsh`.  (Note that 
@@ -180,10 +194,11 @@ A possible solution is as follows:
    * The pool for all ISOs
    * The pool of OS disk images
    * The pool of general purpose disk images
-   * The pool of saved disk images
+   * The pool of saved disk images.  This is a 'backup' pool.  It is managed
+   directly through the CLI.
 1.  Build the required volumes
-    * Build the volumes from OS ISOs
-    * Build the volumes for cloud-image ISOs
+    * Build the volumes for cloud-image ISOs.  
+    * Build the volumes from OS ISOs. 
 1. Build the TKL VMs
    1. Build and configure the `ansible` host.
       * Note that this host must be configured by hand.
@@ -238,11 +253,30 @@ to enter the 'Defined' state.
 ## Detailed steps for 'Save a deployment'
 
 The only dynamic components of the deployment are the VMs/domains.  Hence we 
-can safely ignore
-
-## Detailed steps for 'Undefine a deployment'
+can safely ignore the rest of the `terraform` resources.  
+1. Check that a 'save\_pool' exists
+1. For each VM:
+   1. Either shut it down or suspend it.
+   1. Take a snapshot.
+   1. Copy the snapshot to the 'save\_pool'.
+   1. Copy all associated virtual disks to 'save\_pool'.
+   1. If the VM was suspended then resume it.  Otherwise, leave the VM in the
+   'Defined' state.
 
 ## Detailed steps for 'Restore a deployment'
+The required steps should correspond to the steps taken for the 'Define a
+deployment' use case, except that some of the VMs will be provisioned by saved
+images.
+1. Check that:
+   1. The pool of saved disk images exists.
+   2. This pool contains the required volumes. For example we need at least
+   the `vault` image.
+1. Build the network.
+1. Build the storage pools.
+1. Restore the required volumes.
+1. Define the required domains.
+
+## Detailed steps for 'Undefine a deployment'
 
 ## Detailed steps for 'Suspend a deployment'
 
