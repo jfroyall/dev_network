@@ -140,10 +140,14 @@ do
   backup_domain $d
 done
 
-# check that the state is not empty
-# check that the state is not empty
-# check that the state is not empty
-# check that the state is not empty
+#if the state is empty then exit
+local nof_lines
+nof_lines=`terraform state list | wc -l`
+if [ $nof_lines -eq 0 ];
+then
+  print_info "The state is empty, so exiting."
+  exit 0
+fi
 for d in `terraform show -json | jq '.values.root_module.resources.[]|select(.type=="libvirt_domain").values.name'`;
 do
   print_info "Working on domain $d"
@@ -172,7 +176,7 @@ print_warning "Fix this patch"
 # Better Better remove it from the state as soon as it is created
 terraform state rm 'libvirt_pool.basic["office-backup"]'
 
-terraform plan -destroy -out t.plan -var "dev_host=$1"
+terraform plan -destroy -out t.plan -var-file=vms.tfvars -var "dev_host=$1"
 terraform apply t.plan
 
 

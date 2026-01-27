@@ -181,7 +181,7 @@ remainder of the resources.  These are primarily VMs/domains.
 
 ### Initial stage
 
-1. Build the network.
+1. Build the network.  
 I am currently building the network with `terraform`.  This could be problematic, since 
 this means that the network is destroyed with a `terraform destroy`.  
 A possible solution is as follows:
@@ -190,7 +190,7 @@ A possible solution is as follows:
    1.  Import the infrastructure resource which corresponds to the network 
       and assign it to a resource block.
    1.  All resources which require this resource must include the `depends_on` argument.
-1. Build the storage pools
+1. Build the storage pools  
    * The pool for all ISOs
    * The pool of OS disk images
    * The pool of general purpose disk images
@@ -211,14 +211,15 @@ Note that currently the only TKL VMs built during the first stage are
           file of the root accounts.
    1. Build the `jenkins` controller host.  (Note that this host is "ansible
    ready.)
-1. Store data in `ansible-vault`.
+1. Store data in `ansible-vault`.  
    1. The SSH key values for the `ansible` host.
    1. The SSH key values for the `jenkins` controller.
 1. Configure the `jenkins` controller.
 1. Build the `vault` VM.
 1. Configure the `vault` VM.
-1. Store the `vault` secret keys in the `ansible-vault`.
-1. Store `ansible-vault` secrets in `vault`.  We do this because `terraform`
+1. Store the `vault` secret keys in the `ansible-vault`.  
+1. Store `ansible-vault` secrets in `vault`.  
+We do this because `terraform`
       can easily access secrets from `vault`.
 1. Build a `jenkins` agent VM.
 1. Configure the `jenkins` agent VM.

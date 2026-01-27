@@ -52,4 +52,68 @@ locals {
 
 
 
+# The collection of objects required to construct  cloud-init ISOs
+locals {
+  all_cloud_init_isos =  tomap({
+  for sn_key, sn in 
+  flatten([
+    for vm in var.all_vms:[
+      for branch in var.all_branches:[
+                          {
+                          user_data = vm.user_data
+                          host_name = vm.name
+                          network   = vm.network
+                          branch    = branch
+                          }
+      ]
+    ]
+  ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
+  })
+}
+
+# The collection of objects required to construct  seed_volumes
+locals {
+  all_seed_volumes =  tomap({
+  for sn_key, sn in 
+  flatten([
+    for vm in var.all_vms:[
+      for branch in var.all_branches:[
+                          {
+                          host_name = vm.name
+                          branch    = branch
+                          network   = vm.network
+
+                          #user_data = vm.user_data
+                          #image     = vm.image
+                          #sof_disk  = vm.sof_disk
+                          }
+      ]
+    ]
+    ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
+    })
+}
+
+
+# The collection of objects required to construct  copy-on-write disks
+locals {
+  all_cow_disks =  tomap({
+  for sn_key, sn in 
+  flatten([
+    for vm in var.all_vms:[
+      for branch in var.all_branches:[
+            #"${vm.name}.${branch}.${vm.network}" = {
+                          {
+                          user_data = vm.user_data
+                          host_name = vm.name
+                          network   = vm.network
+                          image     = vm.image
+                          sof_disk  = vm.sof_disk
+                          branch    = branch
+                          }
+      ]
+    ]
+    ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
+    })
+}
+
 

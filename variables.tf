@@ -22,8 +22,13 @@
 
 variable "all_pools" {
   type    = set(string)
-  default = ["os-isos", "vm-templates", "vm-images", "office-backup"]
+  #default = ["os-isos", "vm-templates", "vm-images", "office-backup"]
+  default = ["os-isos", "vm-templates", "vm-images"]
   description ="The pools required for the build."
+}
+variable "pool_storage" {
+  type = string
+  description ="The directory for the pools."
 }
 
 variable "platform_ip" {
@@ -83,6 +88,19 @@ variable "ip_octet"{
   description ="Maps a branch to an IP octet."
 }
 
+
+variable "all_vms"{
+  type = map(object({
+                    name     = string
+                    sof_mem  = number
+                    sof_disk = number
+                    image    = string
+                    network  = string
+                    user_data  = string
+                  }))
+
+  description ="The set of all VMs which will be created."
+}
 
 
 

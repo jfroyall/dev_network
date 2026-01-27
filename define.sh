@@ -34,12 +34,17 @@ cat /dev/null > terraform.tfvars
 
 printf "platform_dns_name = \"%s\"\n" `yq '.common.platform_dns_name' deployment_cfg.yaml` >> terraform.tfvars
 printf "platform_ip = \"%s\"\n" `yq '.common.platform_ip' deployment_cfg.yaml` >> terraform.tfvars
+printf "pool_storage = \"%s\"\n" `yq '.common.pool_storage' deployment_cfg.yaml` >> terraform.tfvars
 
 
 
 #start
-terraform plan -out t.plan -var "dev_host=$1"
-terraform apply t.plan
+terraform plan -out t.plan -var-file=vms.tfvars -var "dev_host=$1"
+if [ $? -ne 0 ]; then
+  print_error "Failed to create the plan"
+  exit 1
+fi
+#terraform apply t.plan
 
 #early_exit
 
