@@ -4,6 +4,7 @@
 
 
 
+##### ##### ##### ##### ##### ##### ##### ##### 
 #setup traps to clean up temporary files
 tempdir=$(mktemp -d)
 function cleanup {
@@ -14,12 +15,12 @@ trap cleanup SIGINT
 
 
 
+##### ##### ##### ##### ##### ##### ##### ##### 
 # function checks that a given domain exits
 function domain_exists {
   print_info "Working on domain: $d"
-  virsh dominfo $d > /dev/null
-  if [ $? -ne 0 ]; then
-    print_warning "The domain named $d was not found.  Skipping the save."
+  if ! virsh dominfo $d ; then
+    print_warning "The domain named $d was not found."
     return 1
   fi
 
@@ -27,6 +28,7 @@ function domain_exists {
 }
 
 
+##### ##### ##### ##### ##### ##### ##### ##### 
 # function which backs up a given domain
 function backup_domain {
   local domain_name=$1
@@ -35,6 +37,7 @@ function backup_domain {
   return 0;
 }
 
+##### ##### ##### ##### ##### ##### ##### ##### 
 # function which checks that the backup pool is ready
 function check_backup_pool {
 
@@ -80,6 +83,7 @@ function check_backup_pool {
   return 0
 }
 
+##### ##### ##### ##### ##### ##### ##### ##### 
 # usage function
 function usage {
 
@@ -90,6 +94,7 @@ EOF
   print_error  usage: $0 [-h] [-n] '{mac|papa}'
 }
 
+##### ##### ##### ##### ##### ##### ##### ##### 
 # default to save the VMs
 save_vms=yes;
 
@@ -114,15 +119,8 @@ if [ $# -ne 1 ];then
   exit 1;
 fi
 
-# check that the backup pool is ready
-if ! check_backup_pool ;
-then
-  print_error "Failed the backup_pool check."
-  exit 1
-fi
-
-
-
+##### ##### ##### ##### ##### ##### ##### ##### 
+# Double check the option
 if [ $save_vms != "yes" ]  ;
 then
   print_warning "Not backing up!."
@@ -140,6 +138,19 @@ then
 fi
 
 
+##### ##### ##### ##### ##### ##### ##### ##### 
+# check that the backup pool is ready
+if ! check_backup_pool ;
+then
+  print_error "Failed the backup_pool check."
+  exit 1
+fi
+
+
+
+
+##### ##### ##### ##### ##### ##### ##### ##### 
+# Save the precious domains
 if [ $save_vms != "no" ]; then
   for d in `yq '.precious_domains.[]' deployment_cfg.yaml`; do
     print_info "Working on domain: $d"
@@ -154,7 +165,8 @@ if [ $save_vms != "no" ]; then
   done
 fi
 
-#if the state is empty then exit
+##### ##### ##### ##### ##### ##### ##### ##### 
+# Check state managed by Terraform
 nof_lines=`terraform state list | wc -l`
 if [ $nof_lines -eq 0 ];
 then
@@ -162,17 +174,18 @@ then
   exit 0
 fi
 
-# save every domain in the state
-for d in `terraform show -json | jq '.values.root_module.resources.[]|select(.type=="libvirt_domain").values.name'`;
+##### ##### ##### ##### ##### ##### ##### ##### 
+# Save every domain in the state
+for d in `terraform show -json | jq -r '.values.root_module.resources.[]|select(.type=="libvirt_domain").values.name'`;
 do
   print_info "Working on domain $d"
 
   if ! domain_exists $d; then continue; fi;
 
-  virsh shutdown $d
-  virsh undefine $d
+  virsh shutdown "$d"
+  virsh undefine "$d"
 
-  terraform state rm `terraform show -json | jq '.values.root_module.resources.[]|select(.type=="libvirt_domain").address'`;
+  terraform state rm `terraform show -json | jq -r '.values.root_module.resources.[]|select(.type=="libvirt_domain").address'`;
 
   if [ $? -ne 0 ]; then
     print_error "Failed to remove $d from the state.  Aborting"
@@ -181,7 +194,16 @@ do
 
 done
 
-terraform plan -destroy -out t.plan -var-file=vms.tfvars -var "dev_host=$1"
+
+##### ##### ##### ##### ##### ##### ##### ##### 
+# Set up a plan to destroy the deployment
+terraform plan -destroy -out t.plan \
+                -var-file=vms.tfvars \
+                -var-file=images.tfvars \
+                -var "dev_host=$1"
+
+##### ##### ##### ##### ##### ##### ##### ##### 
+# Destroy the deployment
 terraform apply t.plan
 
 
@@ -193,5 +215,6 @@ terraform apply t.plan
 #terraform plan -destroy -out t.plan -var "dev_host=$1"
 #terraform apply t.plan
 
+print_info "Successfully destroyed the deployment."
 exit 0
 

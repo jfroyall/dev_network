@@ -116,4 +116,24 @@ locals {
     })
 }
 
+# The collection of objects required to construct the VMs/domains
+locals {
+  all_vm_descriptors =  tomap({
+  for sn_key, sn in 
+  flatten([
+    for vm in var.all_vms:[
+      for branch in var.all_branches:[
+                          {
+                          user_data = vm.user_data
+                          host_name = vm.name
+                          network   = vm.network
+                          branch    = branch
+                          sub_net   = "${vm.network}_${branch}"
+                          }
+      ]
+    ]
+    ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
+    })
+}
+
 

@@ -73,7 +73,8 @@ variable "always_false" {
 
 variable "all_branches" {
   type    = set(string)
-  default = ["prod", "test", "dev"]
+  #default = ["prod", "test", "dev"]
+  default = ["dev"]
   description ="The git branches (correspond to DNS domains)."
 }
 
@@ -102,5 +103,14 @@ variable "all_vms"{
   description ="The set of all VMs which will be created."
 }
 
+
+#The images required.  Note that the index is the name of the VM.
+variable "all_images"{
+  type = map(object({
+                    name = string
+                    url  = string
+                  }))
+  description ="The images required for the build."
+}
 
 

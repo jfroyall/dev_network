@@ -72,7 +72,7 @@ if !  create_backup_pool ; then
 fi
 
 #start
-terraform plan -out t.plan -var-file=vms.tfvars -var "dev_host=$1"
+terraform plan -out t.plan -var-file=images.tfvars -var-file=vms.tfvars -var "dev_host=$1"
 if [ $? -ne 0 ]; then
   print_error "Failed to create the plan"
   exit 1
