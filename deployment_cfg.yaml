@@ -29,8 +29,12 @@ pools:
     location: office_backup
     description: Storage for the backup of images
 
+#The size is in Gigabytes
 backup_pool:
-  name: office-backup
+  name: office_backup
+  path: /scratch/office_backup-pool
+  size: 20
+  description: Storage for the backup of images
 
 precious_domains:
   - ansible

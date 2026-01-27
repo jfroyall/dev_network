@@ -4,16 +4,17 @@
 
 
 
+#setup traps to clean up temporary files
 tempdir=$(mktemp -d)
 function cleanup {
   rm -rf "$tempdir"
 }
-
 trap cleanup EXIT
 trap cleanup SIGINT
 
 
 
+# function checks that a given domain exits
 function domain_exists {
   print_info "Working on domain: $d"
   virsh dominfo $d > /dev/null
@@ -26,13 +27,15 @@ function domain_exists {
 }
 
 
+# function which backs up a given domain
 function backup_domain {
-  local domain_name
-  domain_name=$1
+  local domain_name=$1
   print_info "Working on $domain_name"
 
   return 0;
 }
+
+# function which checks that the backup pool is ready
 function check_backup_pool {
 
 
@@ -74,11 +77,10 @@ function check_backup_pool {
     print_error "Expected that the state of the pool $name_of_backup_pool would be 'running'"
     return 1
   fi
-
-
   return 0
 }
 
+# usage function
 function usage {
 
   cat <<EOF
@@ -88,6 +90,7 @@ EOF
   print_error  usage: $0 [-h] [-n] '{mac|papa}'
 }
 
+# default to save the VMs
 save_vms=yes;
 
 while getopts "hn" c
@@ -111,6 +114,7 @@ if [ $# -ne 1 ];then
   exit 1;
 fi
 
+# check that the backup pool is ready
 if ! check_backup_pool ;
 then
   print_error "Failed the backup_pool check."
@@ -118,40 +122,50 @@ then
 fi
 
 
+
 if [ $save_vms != "yes" ]  ;
 then
   print_warning "Not backing up!."
 
   print_warning "Prompt the user again."
+  answer="neither"
+  until [ $answer == "yes" -o $answer == "no" ]; do
+    read -p "You have elected not to save the VMs!  Are you sure?  [yes|no](no): " answer
+    if [ x$answer == "x" -o x$answer == "xno" ]; then
+      answer="no" 
+      save_vms="yes"
+    fi
+    print_info "The answer: $answer"
+  done
 fi
 
 
-
-for d in `yq '.precious_domains.[]' deployment_cfg.yaml`;
-do
-  print_info "Working on domain: $d"
-#  virsh dominfo $d > /dev/null
-#  if [ $? -ne 0 ]; then
-#    print_warning "The domain named $d was not found.  Skipping the save."
-#    continue
-#  fi
-  if ! domain_exists $d; then continue; fi;
-  print_info "Backing up domain: $d"
-  backup_domain $d
-done
+if [ $save_vms != "no" ]; then
+  for d in `yq '.precious_domains.[]' deployment_cfg.yaml`; do
+    print_info "Working on domain: $d"
+  #  virsh dominfo $d > /dev/null
+  #  if [ $? -ne 0 ]; then
+  #    print_warning "The domain named $d was not found.  Skipping the save."
+  #    continue
+  #  fi
+    if ! domain_exists $d; then continue; fi;
+    print_info "Backing up domain: $d"
+    backup_domain $d
+  done
+fi
 
 #if the state is empty then exit
-local nof_lines
 nof_lines=`terraform state list | wc -l`
 if [ $nof_lines -eq 0 ];
 then
   print_info "The state is empty, so exiting."
   exit 0
 fi
+
+# save every domain in the state
 for d in `terraform show -json | jq '.values.root_module.resources.[]|select(.type=="libvirt_domain").values.name'`;
 do
   print_info "Working on domain $d"
-
 
   if ! domain_exists $d; then continue; fi;
 
@@ -166,15 +180,6 @@ do
   fi
 
 done
-
-print_warning "Removing the backup pool from the state"
-print_warning "Fix this patch"
-
-# check that the state is not empty and the target address validity
-# check that the state is not empty and the target address validity
-# check that the state is not empty and the target address validity
-# Better Better remove it from the state as soon as it is created
-terraform state rm 'libvirt_pool.basic["office-backup"]'
 
 terraform plan -destroy -out t.plan -var-file=vms.tfvars -var "dev_host=$1"
 terraform apply t.plan
