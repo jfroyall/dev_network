@@ -69,56 +69,74 @@ shell scripts, `terraform` configuration files and `ansible` configuration files
 I am inclined to build this file in YAML.  I could use `yq` to extract the necessary 
 information.  I would have preferred JSON but I can't place comments in these files.
 
-This is an embryonic YAML configuration file.
+This is an embryonic YAML configuration file:
 
 <pre>
 common:
-  foo: bar
-  bar: foo
+  platform_dns_name: "papa.home"
+  platform_ip: "192.168.1.96"
+  pool_storage: "/scratch"
 
-network:
-  name: jenkins_network
-  type: nat
-  cidr: 172.32.0.0/24
+#network:
+#  name: jenkins_network
+#  type: nat
+#  cidr: "172.32.0.0/24"
 
+#Defines the storage pools
+#The 'location' is relative to some operator provided absolute directory path
 pools:
-  -name: pool_1
-   type: dir
-   location: /scratch
-   description: A short description
-  -name: pool_2
-   type: dir
-   location: /scratch
-   description: A short description
-  -name: pool_3
-   type: dir
-   location: /scratch
-   description: A short description
+  - name: office_isos
+    type: dir
+    location: office_isos
+    description: Storage for all local ISOs used during the deployment
+  - name: office_images
+    type: dir
+    location: office_images
+    description: Storage for all images tied to a VM/domain
+  - name: office_misc
+    type: dir
+    location: office_misc
+    description: Storage for miscellaneous images
+  - name: office_backup
+    type: dir
+    location: office_backup
+    description: Storage for the backup of images
 
-ansible:
-  hostname: ansible
+#The size is in Gigabytes
+backup_pool:
+  name: office_backup
+  path: /scratch/office_backup-pool
+  size: 20
+  description: Storage for the backup of images
 
-vault:
-  hostname: vault
+precious_domains:
+  - ansible
+  - foobar
 
-jenkins:
-  hostname: jenkins
+core_vms:
+  - ansible:
+    hostname: ansible
 
-jenkins_agent:
-  - name: agent_1
-  - name: agent_2
-  
-- path: /instance_groups/name=jumpbox/jobs/-
-  type: replace
-  value:
-    name: pre-start-script
-    release: os-conf
-    properties:
-      script: |-
-               #!/bin/bash
-               hostname ((internal_tag_name))
+  - vault:
+    hostname: vault
 
+  - jenkins:
+    hostname: jenkins
 
+  - jenkins_agent:
+    - name: agent_1
+    - name: agent_2
+#  
+#- path: /instance_groups/name=jumpbox/jobs/-
+#  type: replace
+#  value:
+#    name: pre-start-script
+#    release: os-conf
+#    properties:
+#      script: |-
+#               #!/bin/bash
+#               hostname ((internal_tag_name))
+#
 </pre>
 
 ## The Use-Cases
@@ -163,7 +181,7 @@ stored from an earlier run. We must be in an 'Undefined' state.
 
 1.  ***Pause a deployment***
 
-## Detailed steps for 'Define a deployment'
+## Detailed steps to 'Define a deployment'
 
 These are the key points regarding the deployment definition:
 
@@ -173,8 +191,8 @@ state.  In particular we remove the 'domain' resources from the state.  The
 idea is to back-up these resources prior to their destruction---via the
 `virsh` CLI.
 
-* The pool of saved images is created by `terraform`, but it is immediately
-removed from the state.  Its control is never automated.
+* The pool of saved images is created by `virsh`.
+ Its control is never automated.
 
 * The initial stage builds all of the core resources.  The second stage builds the
 remainder of the resources.  These are primarily VMs/domains.
@@ -195,7 +213,7 @@ A possible solution is as follows:
    * The pool of OS disk images
    * The pool of general purpose disk images
    * The pool of saved disk images.  This is a 'backup' pool.  It is managed
-   directly through the CLI.
+   directly through the `virsh` CLI.
 1.  Build the required volumes
     * Build the volumes for cloud-image ISOs.  
     * Build the volumes from OS ISOs. 
@@ -242,18 +260,18 @@ instances include:
 Be sure that all VMs are returned to a 'Defined' state.
 
 
-## Detailed steps for 'Start a deployment'
+## Detailed steps to 'Start a deployment'
 
 We are assuming that when we 'Define' the deployment the VMs/domains 
 are in the 'Defined' state.  The processing which corresponds to this 
 use-case is to command each VM to enter the 'Running' state.
 
-## Detailed steps for 'Shutdown a deployment'
+## Detailed steps to 'Shutdown a deployment'
 
 The processing which corresponds to this use-case is to command each VM 
 to enter the 'Defined' state.
 
-## Detailed steps for 'Save a deployment'
+## Detailed steps to 'Save a deployment'
 
 The only dynamic components of the deployment are the VMs/domains.  Hence we 
 can safely ignore the rest of the `terraform` resources.  
@@ -266,7 +284,7 @@ can safely ignore the rest of the `terraform` resources.
    1. If the VM was suspended then resume it.  Otherwise, leave the VM in the
    'Defined' state.
 
-## Detailed steps for 'Restore a deployment'
+## Detailed steps to 'Restore a deployment'
 The required steps should correspond to the steps taken for the 'Define a
 deployment' use case, except that some of the VMs will be provisioned by saved
 images.
@@ -279,11 +297,11 @@ images.
 1. Restore the required volumes.
 1. Define the required domains.
 
-## Detailed steps for 'Undefine a deployment'
+## Detailed steps to 'Undefine a deployment'
 
-## Detailed steps for 'Suspend a deployment'
+## Detailed steps to 'Suspend a deployment'
 
-## Detailed steps for 'Resume a deployment'
+## Detailed steps to 'Resume a deployment'
 
 ## Issues which must be resolved
 
@@ -320,42 +338,39 @@ site.
 > 
 > Now what you need to do is:
 > 
-> Create the pool
-> 
+> Create the pool > 
 > `virsh pool-define-as new-dir dir - - - - "/var/lib/libvirt/new-dir"`
+
 > Create the directory
-> 
-> mkdir -p "/var/lib/libvirt/new-dir"
+> `mkdir -p "/var/lib/libvirt/new-dir"`
 > Make sure the permissions are set correctly.
-> 
 > chown qemu:qemu "/var/lib/libvirt/new-dir"
+
 > If you run on RHEL based systems you need to run restorecon for the SELinux relabling
-> 
-> restorecon -vvRF /var/lib/libvirt/new-dir
+> `restorecon -vvRF /var/lib/libvirt/new-dir`
+
 > Now let's build the pool
-> 
-> virsh pool-build new-dir
+> `virsh pool-build new-dir`
+
 > Start the pool
-> 
-> virsh pool-start new-dir
+> `virsh pool-start new-dir`
+
 > If you want the pool to autostart on the next reboot you'd need to run
-> 
-> virsh pool-autostart new-dir
+> `virsh pool-autostart new-dir`
+
 > Finally run
-> 
-> virsh pool-list && virsh pool-info new-dir
+> `virsh pool-list && virsh pool-info new-dir`
+
 > Migrate VM to the new pool
 > 
 > Copy the images to the new dir
-> 
-> cp -a /var/lib/libvirt/images/my-vm-name /var/lib/libvirt/new-dir/
+> `cp -a /var/lib/libvirt/images/my-vm-name /var/lib/libvirt/new-dir/`
+
 > Now dump my-vm-name definition to xml
-> 
-> virsh dumpxml my-vm-name > new-vm-name
+> `virsh dumpxml my-vm-name > new-vm-name`
+>
 > Change the location (as you already mentioned in your question) to the new location
-> 
-> sed -i 's/images/new-dir/g;s/my-vm-name/new-vm-name/' new-vm-name
+> `sed -i 's/images/new-dir/g;s/my-vm-name/new-vm-name/' new-vm-name`
+>
 > .. and finally define the new VM and start it
-> 
-> virsh define new-vm-name && virsh start new-vm-name
-> Share
+> `virsh define new-vm-name && virsh start new-vm-name`

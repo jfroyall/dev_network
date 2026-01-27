@@ -38,21 +38,28 @@ backup_pool:
 
 precious_domains:
   - ansible
-  - foobar
+  - jenkins
 
 core_vms:
   - ansible:
     hostname: ansible
+    precious: yes
 
   - vault:
     hostname: vault
+    precious: yes
 
   - jenkins:
     hostname: jenkins
+    precious: yes
 
   - jenkins_agent:
     - name: agent_1
+    - hostname: agent_1
+      precious: yes
     - name: agent_2
+    - hostname: agent_2
+      precious: yes
 #  
 #- path: /instance_groups/name=jumpbox/jobs/-
 #  type: replace
