@@ -301,3 +301,61 @@ images.
     the `libvirt` domain state diagram as a model.  That is build scripts 
     named `define.sh`, `undefine.sh`, `create.sh`, `shutdown.sh`, etc.  
     These scripts would use the YAML configuration file to take appropriate action._
+
+
+
+## How to properly change a storage directory
+I found the following quote at
+[this](https://serverfault.com/questions/1104983/migrating-libvirt-guest-vm-to-a-new-storage-directory-on-the-same-host)
+site.
+> 
+> 
+> However, please take into consideration that the VM may be using a storage pool, and by best practice you can use pools to hold/manage VM storage:
+> 
+> Most probably you are using the default pool which will point to /var/lib/libvirt/images. You can verify this using virsh pool-list. So creating a new dir won't do anything as no storage pool is configured to point to the new dir yet.
+> 
+> See how the default pool looks like using virsh vol-list default.
+> 
+> Rather create a new pool to keep things clean.
+> 
+> Now what you need to do is:
+> 
+> Create the pool
+> 
+> `virsh pool-define-as new-dir dir - - - - "/var/lib/libvirt/new-dir"`
+> Create the directory
+> 
+> mkdir -p "/var/lib/libvirt/new-dir"
+> Make sure the permissions are set correctly.
+> 
+> chown qemu:qemu "/var/lib/libvirt/new-dir"
+> If you run on RHEL based systems you need to run restorecon for the SELinux relabling
+> 
+> restorecon -vvRF /var/lib/libvirt/new-dir
+> Now let's build the pool
+> 
+> virsh pool-build new-dir
+> Start the pool
+> 
+> virsh pool-start new-dir
+> If you want the pool to autostart on the next reboot you'd need to run
+> 
+> virsh pool-autostart new-dir
+> Finally run
+> 
+> virsh pool-list && virsh pool-info new-dir
+> Migrate VM to the new pool
+> 
+> Copy the images to the new dir
+> 
+> cp -a /var/lib/libvirt/images/my-vm-name /var/lib/libvirt/new-dir/
+> Now dump my-vm-name definition to xml
+> 
+> virsh dumpxml my-vm-name > new-vm-name
+> Change the location (as you already mentioned in your question) to the new location
+> 
+> sed -i 's/images/new-dir/g;s/my-vm-name/new-vm-name/' new-vm-name
+> .. and finally define the new VM and start it
+> 
+> virsh define new-vm-name && virsh start new-vm-name
+> Share
