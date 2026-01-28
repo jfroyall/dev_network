@@ -182,11 +182,12 @@ do
 
   if ! domain_exists $d; then continue; fi;
 
+
   virsh shutdown "$d"
   virsh undefine "$d"
 
-  terraform state rm `terraform show -json | jq -r '.values.root_module.resources.[]|select(.type=="libvirt_domain").address'`;
-
+  set
+  terraform state rm `terraform show -json | jq -r --arg nm $d '.values.root_module.resources.[]|select(.type=="libvirt_domain" and .values.name==$nm).address'`;
   if [ $? -ne 0 ]; then
     print_error "Failed to remove $d from the state.  Aborting"
     exit 1

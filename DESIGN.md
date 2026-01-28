@@ -48,7 +48,7 @@ I use `terraform` to destroy `jenkins_network`.
 
 ## Regarding the VMs built with `terraform`
 
-The `jenkins` agent is built with `terraform`.  These VMs will have to be 
+The `jenkins` agent are built with `terraform`.  These VMs will have to be 
 configured with `ansible`.
 
 I used a _Debian_ image for the `jenkins` agent.  I ran into the following problems:
@@ -62,15 +62,38 @@ The configuration steps will require the installation of at least:
 * `docker`
 
 
-## The need for a top level configuration file
+## Regarding the top level configuration file
 
 It is apparent that a number of configuration parameters will have to be shared between 
 shell scripts, `terraform` configuration files and `ansible` configuration files.  
 I am inclined to build this file in YAML.  I could use `yq` to extract the necessary 
 information.  I would have preferred JSON but I can't place comments in these files.
 
-This is an embryonic YAML configuration file:
+The scripts should extract the necessary information for the configuration
+`.yaml` file and build temporary configuration files for `terraform` and for
+`ansible`.  For example the default `terraform.tfvars` could be populated with
+such variables.  I will need to find a similar mechanism for `ansible`.
 
+How should I refactor the code to place the proper configuration variables in
+the `.yaml` file.    
+First note that `terraform` deals with the following types of
+objects/resources:
+* `libvirt_domain`
+* `libvirt_pool`
+* `libvirt_volume`
+* `libvirt_cloudinit_disk`
+
+The scripts must deal directly with `libvirt` objects of the following types:
+* domains
+   * For backup to distinguish between TKL and cloud based instances.
+* volumes
+   * For the backup of extra disk images.
+
+The `ansible` application deals with 
+* domains
+   * To configure certain instances
+
+This is an embryonic YAML configuration file:
 <pre>
 common:
   platform_dns_name: "papa.home"
@@ -84,24 +107,24 @@ common:
 
 #Defines the storage pools
 #The 'location' is relative to some operator provided absolute directory path
-pools:
-  - name: office_isos
-    type: dir
-    location: office_isos
-    description: Storage for all local ISOs used during the deployment
-  - name: office_images
-    type: dir
-    location: office_images
-    description: Storage for all images tied to a VM/domain
-  - name: office_misc
-    type: dir
-    location: office_misc
-    description: Storage for miscellaneous images
-  - name: office_backup
-    type: dir
-    location: office_backup
-    description: Storage for the backup of images
-
+#pools:
+#  - name: office_isos
+#    type: dir
+#    location: office_isos
+#    description: Storage for all local ISOs used during the deployment
+#  - name: office_images
+#    type: dir
+#    location: office_images
+#    description: Storage for all images tied to a VM/domain
+#  - name: office_misc
+#    type: dir
+#    location: office_misc
+#    description: Storage for miscellaneous images
+#  - name: office_backup
+#    type: dir
+#    location: office_backup
+#    description: Storage for the backup of images
+#
 #The size is in Gigabytes
 backup_pool:
   name: office_backup

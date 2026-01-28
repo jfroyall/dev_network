@@ -4,16 +4,16 @@ locals {
     "mac"  = "qemu+sshcmd://jean@192.168.1.96/system?keyfile=/home/jean/.ssh/id_rsa&no_verify=0&sshauth=privkey"
   }
 
-  scratch_map = {
-    "papa" = "/scratch"
-    "mac"  = "/Users/jean/Scratch"
-  }
+  #scratch_map = {
+  #  "papa" = "/scratch"
+  #  "mac"  = "/Users/jean/Scratch"
+  #}
 
 }
 
 
 locals {
-  t_control_networks ={
+  control_networks ={
         for b in var.all_branches : 
             "control_${b}" => {
                                 name   = "control_${b}"
@@ -28,7 +28,7 @@ locals {
                                 }
   }
 
-  t_internal_networks ={
+  internal_networks ={
         for b in var.all_branches : 
             "internal_${b}" => {
                                 name   = "internal_${b}"
@@ -43,11 +43,8 @@ locals {
                                 }
   }
 
-}
-# The collection of objects required to construct the networks
-locals {
-  #network_descriptors = merge(var.all_control_networks, var.all_inner_networks) 
-  network_descriptors = merge(local.t_control_networks, local.t_internal_networks) 
+  #The collection of objects required to construct the networks
+  network_descriptors = merge(local.control_networks, local.internal_networks) 
 }
 
 
@@ -55,84 +52,84 @@ locals {
 # The collection of objects required to construct  cloud-init ISOs
 locals {
   all_cloud_init_isos =  tomap({
-  for sn_key, sn in 
-  flatten([
-    for vm in var.all_vms:[
-      for branch in var.all_branches:[
-                          {
-                          user_data = vm.user_data
-                          host_name = vm.name
-                          network   = vm.network
-                          branch    = branch
-                          }
-      ]
-    ]
-  ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
+    for sn_key, sn in 
+      flatten([
+        for vm in var.all_vms:[
+          for branch in var.all_branches:[
+                              {
+                              user_data = vm.user_data
+                              host_name = vm.name
+                              network   = vm.network
+                              branch    = branch
+                              }
+          ]
+        ]
+      ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
   })
 }
 
 # The collection of objects required to construct  seed_volumes
 locals {
   all_seed_volumes =  tomap({
-  for sn_key, sn in 
-  flatten([
-    for vm in var.all_vms:[
-      for branch in var.all_branches:[
-                          {
-                          host_name = vm.name
-                          branch    = branch
-                          network   = vm.network
+    for sn_key, sn in 
+      flatten([
+        for vm in var.all_vms:[
+          for branch in var.all_branches:[
+                              {
+                              host_name = vm.name
+                              branch    = branch
+                              network   = vm.network
 
-                          #user_data = vm.user_data
-                          #image     = vm.image
-                          #sof_disk  = vm.sof_disk
-                          }
-      ]
-    ]
-    ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
-    })
+                              #user_data = vm.user_data
+                              #image     = vm.image
+                              #sof_disk  = vm.sof_disk
+                              }
+          ]
+        ]
+      ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
+  })
 }
 
 
 # The collection of objects required to construct  copy-on-write disks
 locals {
   all_cow_disks =  tomap({
-  for sn_key, sn in 
-  flatten([
-    for vm in var.all_vms:[
-      for branch in var.all_branches:[
-            #"${vm.name}.${branch}.${vm.network}" = {
-                          {
-                          user_data = vm.user_data
-                          host_name = vm.name
-                          network   = vm.network
-                          image     = vm.image
-                          sof_disk  = vm.sof_disk
-                          branch    = branch
-                          }
-      ]
-    ]
-    ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
-    })
+    for sn_key, sn in 
+      flatten([
+        for vm in var.all_vms:[
+          for branch in var.all_branches:[
+                #"${vm.name}.${branch}.${vm.network}" = {
+                              {
+                              user_data = vm.user_data
+                              host_name = vm.name
+                              network   = vm.network
+                              image     = vm.image
+                              sof_disk  = vm.sof_disk
+                              branch    = branch
+                              }
+          ]
+        ]
+      ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
+  })
 }
 
 # The collection of objects required to construct the VMs/domains
 locals {
   all_vm_descriptors =  tomap({
-  for sn_key, sn in 
-  flatten([
-    for vm in var.all_vms:[
-      for branch in var.all_branches:[
-                          {
-                          user_data = vm.user_data
-                          host_name = vm.name
-                          network   = vm.network
-                          branch    = branch
-                          sub_net   = "${vm.network}_${branch}"
-                          }
-      ]
-    ]
-    ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
+    for sn_key, sn in 
+      flatten([
+        for vm in var.all_vms:[
+          for branch in var.all_branches:[
+                              {
+                              user_data = vm.user_data
+                              host_name = vm.name
+                              network   = vm.network
+                              branch    = branch
+                              sub_net   = "${vm.network}_${branch}"
+                              }
+          ]
+        ]
+      ]): "${sn.host_name}.${sn.network}.${sn.branch}" => sn
     })
 }
 

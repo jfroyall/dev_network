@@ -11,23 +11,19 @@ common:
 
 #Defines the storage pools
 #The 'location' is relative to some operator provided absolute directory path
-pools:
-  - name: office_isos
-    type: dir
-    location: office_isos
-    description: Storage for all local ISOs used during the deployment
-  - name: office_images
-    type: dir
-    location: office_images
-    description: Storage for all images tied to a VM/domain
-  - name: office_misc
-    type: dir
-    location: office_misc
-    description: Storage for miscellaneous images
-  - name: office_backup
-    type: dir
-    location: office_backup
-    description: Storage for the backup of images
+#pools:
+#  - name: office-isos
+#    type: dir
+#    location: office-isos
+#    description: Storage for all local ISOs used during the deployment
+#  - name: office-vm-images
+#    type: dir
+#    location: office-images
+#    description: Storage for all images tied to a VM/domain
+#  - name: office-misc
+##    type: dir
+#    location: office_misc
+#    description: Storage for miscellaneous images
 
 #The size is in Gigabytes
 backup_pool:
@@ -60,14 +56,55 @@ core_vms:
     - name: agent_2
     - hostname: agent_2
       precious: yes
-#  
-#- path: /instance_groups/name=jumpbox/jobs/-
-#  type: replace
-#  value:
-#    name: pre-start-script
-#    release: os-conf
-#    properties:
-#      script: |-
-#               #!/bin/bash
-#               hostname ((internal_tag_name))
-#
+
+# A VM is 'precious' if it difficult to recreate.  We would therefore prefer
+# to have a backup.  For example all TKL VMs are based on ISOs, hence
+# automating their construction is difficult.  Such VMs are deemed 'precious'.
+# The sizes of memory and disk is specified in Gibabytes.
+all_vms :
+  - name    : "vault"
+    sof_mem : 1
+    sof_disk: 2
+    image   : "alpine"
+    network : "control"
+    user_data : "vault-user-data.yaml.tpl"
+    precious: yes
+    enabled:  no
+
+  - name    : "jumpbox"
+    sof_mem : 1
+    sof_disk: 2
+    image   : "alpine"
+    network : "control"
+    user_data : "user-data.yaml.tpl"
+    precious: yes
+    enabled:  yes
+
+  - name    : "ansible"
+    sof_mem : 1
+    sof_disk: 2
+    image   : "ansible"
+    network : "control"
+    user_data : "ansible-user-data.yaml.tpl"
+    precious: yes
+    enabled:  no
+
+  - name    : "jenkins"
+    sof_mem : 1
+    sof_disk: 2
+    image   : "jenkins"
+    network : "control"
+    user_data : "user-data.yaml.tpl"
+    precious: yes
+    enabled:  no
+
+  - name    : "nginx"
+    sof_mem : 1
+    sof_disk: 2
+    image   : "alpine"
+    network : "control"
+    user_data : "user-data.yaml.tpl"
+    precious: yes
+    enabled:  no
+
+
