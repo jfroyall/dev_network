@@ -3,6 +3,7 @@ common:
   platform_dns_name: "papa.home"
   platform_ip: "192.168.1.96"
   pool_storage: "/scratch"
+  iso_storage: "/Users/jean/Scratch/"
 
 #network:
 #  name: jenkins_network
@@ -78,14 +79,14 @@ all_vms :
     network : "control"
     user_data : "user-data.yaml.tpl"
     precious: yes
-    enabled:  yes
+    enabled:  no
 
-  - name    : "ansible"
+  - name    : "nginx"
     sof_mem : 1
     sof_disk: 2
-    image   : "ansible"
+    image   : "alpine"
     network : "control"
-    user_data : "ansible-user-data.yaml.tpl"
+    user_data : "user-data.yaml.tpl"
     precious: yes
     enabled:  no
 
@@ -98,13 +99,33 @@ all_vms :
     precious: yes
     enabled:  no
 
-  - name    : "nginx"
+  - name    : "ansible"
     sof_mem : 1
     sof_disk: 2
-    image   : "alpine"
+    image   : "ansible"
     network : "control"
-    user_data : "user-data.yaml.tpl"
+    user_data : "ansible-user-data.yaml.tpl"
     precious: yes
     enabled:  no
 
+isos: 
+  - name   : "jenkins"
+    mirror : "http://mirror.turnkeylinux.org/turnkeylinux/"
+    image  : "images/proxmox/debian-12-turnkey-jenkins_18.1-1_amd64.tar.gz"
+    hash   : "images/proxmox/debian-12-turnkey-jenkins_18.1-1_amd64.tar.gz.hash"
+
+    #url : "https://www.turnkeylinux.org/download?file=turnkey-jenkins-18.1-bookworm-amd64.iso"
+    #url : "http://mirror.turnkeylinux.org/turnkeylinux/images/iso/turnkey-jenkins-18.1-bookworm-amd64.iso"
+    #url : "file:///scratch/turnkey-jenkins-18.1-bookworm-amd64.iso"
+    #url : "${var.iso_storage}turnkey-jenkins-18.1-bookworm-amd64.iso"
+
+  - name   : "ansible"
+    mirror : "http://mirror.turnkeylinux.org/turnkeylinux/"
+    image  : "images/proxmox/debian-12-turnkey-ansible_18.0-1_amd64.tar.gz"
+    hash   : "images/proxmox/debian-12-turnkey-ansible_18.0-1_amd64.tar.gz.hash"
+    #url : "/Users/jean/Scratch/turnkey-ansible-18.0-bookworm-amd64.iso"
+    #url : "https://www.turnkeylinux.org/download?file=turnkey-ansible-18.0-bookworm-amd64.iso"
+    #url : "http://mirror.turnkeylinux.org/turnkeylinux/images/iso/turnkey-ansible-18.0-bookworm-amd64.iso"
+    #url : "file:///scratch/turnkey-ansible-18.0-bookworm-amd64.iso"
+    #url : "${var.iso_storage}/turnkey-ansible-18.0-bookworm-amd64.iso"
 

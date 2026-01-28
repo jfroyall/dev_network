@@ -33,7 +33,6 @@ EOF
   declare -i nof_objs=`jq -r '.|length' $json_file_name`
   echo "val: $nof_objs"
 
-
   local -i n=0
 
   for ((n=0; n < nof_objs; ++n )); do 
@@ -147,6 +146,7 @@ cat /dev/null > terraform.tfvars
 printf "platform_dns_name = \"%s\"\n" `yq '.common.platform_dns_name' deployment_cfg.yaml` >> terraform.tfvars
 printf "platform_ip       = \"%s\"\n" `yq '.common.platform_ip' deployment_cfg.yaml` >> terraform.tfvars
 printf "pool_storage      = \"%s\"\n" `yq '.common.pool_storage' deployment_cfg.yaml` >> terraform.tfvars
+printf "iso_storage       = \"%s\"\n" `yq '.common.iso_storage' deployment_cfg.yaml` >> terraform.tfvars
 
 ##### ##### ##### ##### ##### ##### ##### ##### 
 # Create vms.tfvars from the configuration YAML

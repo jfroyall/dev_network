@@ -14,13 +14,12 @@
 #}
 
 ## Volume for a prebuilt image (used as a backing store for vm_disk)
-resource "libvirt_volume" "alpine_images" {
+resource "libvirt_volume" "images" {
 
   for_each = var.all_images
 
   name = "${each.value.name}.qcow2"
   pool = libvirt_pool.basic["vm-images"].name
-  #format = "qcow2"
 
   create = {
     content = {
@@ -40,13 +39,15 @@ resource "libvirt_volume" "vm_disk" {
   #type     = "file"
   capacity  = "${each.value.sof_disk}"
   #capacity_unit = "GiB"
+
   target = {
     format = {
       type   = "qcow2"
     }
   }
+
   backing_store = {
-    path   =  libvirt_volume.alpine_images["${each.value.image}"].path
+    path   =  libvirt_volume.images["${each.value.image}"].path
     format = {
       type = "qcow2"
       #type = "raw"
