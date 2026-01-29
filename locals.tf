@@ -1,6 +1,6 @@
 locals {
   uri_map = {
-    "papa" = "qemu://system"
+    "papa" = "qemu:///system"
     "mac"  = "qemu+sshcmd://jean@192.168.1.96/system?keyfile=/home/jean/.ssh/id_rsa&no_verify=0&sshauth=privkey"
   }
 
