@@ -11,6 +11,9 @@
 
 . utils.sh
 
+CODENAME=bookworm # NOTE update this to relevant release codename
+TK_KEY_VERSION=18.x # NOTE update this to the relevant TKL version
+TK_VERSION=18.1     # NOTE update this to the relevant TKL version
 
 iso_storage=`yq '.common.iso_storage' deployment_cfg.yaml`
 
@@ -19,42 +22,60 @@ if [ ! -d $iso_storage ]; then
   exit 1
 fi
 
+print_warning "Use a temporary directory"
 json_file_name="t.json"
+
+############### ############### ############### ###############
+# Extract the ISO objects from the configuration YAML
 yq -o=json '.isos' deployment_cfg.yaml > $json_file_name
+
+
+############### ############### ############### ###############
+# Download the ISOs
 set +x
 declare -i nof_objs=`jq -r '.|length' $json_file_name`
 for (( n=0; n < nof_objs; ++n )); do 
   for nm in name mirror image hash; do
-    print_info $nm
+    #print_info $nm
     ts=`jq -r --arg n $n  --arg nm "$nm" '.[$n|tonumber].[$nm]' $json_file_name `
-    printf "    %-12s      : \"%s\"\n" $nm $ts 
+    #printf "    %-12s      : \"%s\"\n" $nm $ts 
     eval "$nm=$ts"
   done
   print_info "working on ISO named $name "
 
   pushd $iso_storage
-  out_file_name=$name.iso.tgz
-  if [ ! -f $out_file_name ]; then
-    curl -o $out_file_name -X GET ${mirror}${image}
-    if [ $? -ne 0 ]; then
-      print_error "Failed the curl call for $name."
-      exit 1
-    fi
-  else
-      print_warning "The file named $out_file_name already exists."
-  fi
-  out_file_name=$name.hash
-  if [ ! -f $out_file_name ]; then
-    curl -o $out_file_name -X GET ${mirror}${hash}
-    if [ $? -ne 0 ]; then
-      print_error "Failed the curl call for $name."
-      exit 1
-    fi
-  else
-      print_warning "The file named $out_file_name already exists."
-  fi
+
+      iso_file_name=$name.iso.tgz
+      if [ ! -f $iso_file_name ]; then
+        curl -o $iso_file_name -X GET ${mirror}${image}
+        if [ $? -ne 0 ]; then
+          print_error "Failed the curl call for $name."
+          exit 1
+        fi
+      else
+          print_warning "The file named $iso_file_name already exists."
+      fi
+      hash_file_name=$name.hash
+      if [ ! -f $hash_file_name ]; then
+        curl -o $hash_file_name -X GET ${mirror}${hash}
+        if [ $? -ne 0 ]; then
+          print_error "Failed the curl call for $name."
+          exit 1
+        fi
+      else
+          print_warning "The file named $hash_file_name already exists."
+      fi
 
 
+      # Check the ISO. See https://www.turnkeylinux.org/docs/release-verification
+
+      #curl  https://raw.githubusercontent.com/turnkeylinux/common/master/keys/tkl-$CODENAME-images.asc | gpg --import
+      curl https://raw.githubusercontent.com/turnkeylinux/common/refs/heads/${TK_KEY_VERSION}/keys/tkl-${CODENAME}-images.asc \
+              | gpg --import
+
+      print_warning "Use gpgv instead!"
+      #gpg --list-keys --with-fingerprint release-$CODENAME-images@turnkeylinux.org
+      gpg --verify ${hash_file_name}
 
 
   popd 
@@ -125,5 +146,4 @@ done
 
 
 
-:w
-
+ gpg --list-keys --with-fingerprint release-bookworm-images@turnkeylinux.org
