@@ -71,11 +71,17 @@ for (( n=0; n < nof_objs; ++n )); do
 
       #curl  https://raw.githubusercontent.com/turnkeylinux/common/master/keys/tkl-$CODENAME-images.asc | gpg --import
       curl https://raw.githubusercontent.com/turnkeylinux/common/refs/heads/${TK_KEY_VERSION}/keys/tkl-${CODENAME}-images.asc \
-              | gpg --import
+              | gpg -q --import 
 
-      print_warning "Use gpgv instead!"
       #gpg --list-keys --with-fingerprint release-$CODENAME-images@turnkeylinux.org
-      gpg --verify ${hash_file_name}
+
+      #gpg --verify ${hash_file_name}
+      if ! gpgv -q --keyring pubring.kbx ${hash_file_name} > /dev/null; then
+        print_error "Someone may have tampered with the hash file named $hash_file_name."
+        exit 1
+      else
+        print_info "Good signature for the hash file named $hash_file_name."
+      fi
 
 
   popd 
